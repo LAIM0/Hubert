@@ -24,10 +24,11 @@
       <ChoiceBox layoutX="864.0" layoutY="102.0" prefWidth="150.0" styleClass="lbl-info" />
       <Pane layoutX="29.0" layoutY="14.0" prefHeight="72.0" prefWidth="1150.0" styleClass="panel-info">
          <children>
-            <Button layoutX="279.0" layoutY="19.0" mnemonicParsing="false" styleClass="btn-primary" text="Save File" />
+             <Button fx:id="saveButton" layoutX="179.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleSaveMap" text="Save Tour" />
             <Button layoutX="149.0" layoutY="19.0" mnemonicParsing="false" styleClass="btn-primary" text="New courrier" />
             <Button fx:id="delivery" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleOpenNewWindow" styleClass="btn-primary" text="New Delivery" />
-            <ImageView fitHeight="50.0" fitWidth="133.0" layoutX="1073.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+             <Button fx:id="loadMapButton" layoutX="200" layoutY="700" mnemonicParsing="false" onAction="#handleLoadMap" text="Load New Map" />
+             <ImageView fitHeight="50.0" fitWidth="133.0" layoutX="1073.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@logo.png" />
                </image>

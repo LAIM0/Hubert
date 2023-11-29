@@ -3,12 +3,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 import fr.insalyonif.hubert.model.*;
 import javafx.stage.Stage;
@@ -29,6 +35,9 @@ public class ViewController implements Initializable {
 
     @FXML
     private Button delivery;
+
+    @FXML
+    private Button saveButton;
 
     private CityMap cityMap;
     private Dijkstra dij;
@@ -294,7 +303,7 @@ public class ViewController implements Initializable {
         return hexComponent.length() == 1 ? "0" + hexComponent : hexComponent;
     }
 
-    @Override
+    /*@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cityMap = new CityMap();
         listeDelivery = new ArrayList<>();
@@ -318,5 +327,98 @@ public class ViewController implements Initializable {
         String mapHtml = MAP_HTML_TEMPLATE;
 
         engine.loadContent(mapHtml);
+    }*/
+    @FXML
+    private Button loadMapButton; // Add a button for loading the map
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize the UI without loading the map
+        cityMap = new CityMap();
+        listeDelivery = new ArrayList<>();
+        engine = webView.getEngine();
+    }
+
+    @FXML
+    void handleLoadMap(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open XML Map File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+        File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                // Load the selected XML map file
+                cityMap.loadFromXML(selectedFile.getAbsolutePath());
+
+                // Set up Dijkstra and other necessary initialization
+                sizeGraph = cityMap.getIntersections().size();
+                dij = new Dijkstra(sizeGraph, cityMap);
+                dijInv = new DijkstraInverse(sizeGraph, cityMap);
+
+                // Load the map
+                loadMap();
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Handle the exception (e.g., show an error message)
+            }
+        }
+    }
+
+    private void loadMap() {
+        // Code for loading the map, as previously in the initialize method
+
+        // For example:
+        String mapHtml = MAP_HTML_TEMPLATE;
+        engine.loadContent(mapHtml);
+    }
+
+    @FXML
+    void handleSaveMap(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CityMap File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+        File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                saveCityMapToFile(selectedFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle the exception (e.g., show an error message)
+            }
+        }
+    }
+
+    private void saveCityMapToFile(String filePath) throws IOException {
+        // Get the CityMap instance from your controller
+        ; // Replace with the actual reference to your CityMap instance
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            // Save the CityMap data to the file
+            // You can customize this based on your CityMap data structure and attributes
+            writer.println("<citymap>");
+            writer.println("    <warehouse address=\"" + cityMap.getWareHouseLocation().getId() + "\" />");
+
+            for (Intersection intersection : cityMap.getIntersections()) {
+                writer.println("    <intersection id=\"" + intersection.getId() +
+                        "\" latitude=\"" + intersection.getLatitude() +
+                        "\" longitude=\"" + intersection.getLongitude() + "\" />");
+            }
+
+            for (Chemin chemin : cityMap.getChemins()) {
+                writer.println("    <chemin debut=\"" + chemin.getDebut().getId() +
+                        "\" fin=\"" + chemin.getFin().getId() +
+                        "\" cout=\"" + chemin.getCout() + "\">");
+
+                for (int i = 0; i < chemin.getPi().length; i++) {
+                    writer.println("        <pi index=\"" + i + "\">" + chemin.getPi()[i] + "</pi>");
+                }
+
+                writer.println("    </chemin>");
+            }
+
+            writer.println("</citymap>");
+        }
     }
 }
