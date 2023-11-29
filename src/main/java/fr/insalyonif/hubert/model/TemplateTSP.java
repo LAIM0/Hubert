@@ -19,7 +19,7 @@ public abstract class TemplateTSP implements TSP {
 		startTime = System.currentTimeMillis();
 		this.timeLimit = timeLimit;
 		this.g = g;
-		bestSol = new Integer[g.getNbVertices()];
+		bestSol = new Integer[g.getNbVertices()+1];
 		Collection<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
 		Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
@@ -42,7 +42,7 @@ public abstract class TemplateTSP implements TSP {
 
 	public List<Chemin> bestCheminGlobal(List<Chemin> chemins) {
 		List<Chemin> bestChemin = new ArrayList<>();
-
+		bestSol[g.getNbVertices()]=0;
 		// Récupérer la HashMap associant les positions aux indices
 		Map<Integer, Integer> positionToIndex = g.getPositionToIndexMap();
 		System.out.println("Clés de la HashMap : " + positionToIndex.keySet());
