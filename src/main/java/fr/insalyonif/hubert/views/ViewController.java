@@ -369,9 +369,12 @@ public class ViewController implements Initializable {
         // Code for loading the map, as previously in the initialize method
 
         // For example:
-        String mapHtml = MAP_HTML_TEMPLATE;
+        String markersJs = displayDeliveryPoints().toString();
+        String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
+
         engine.loadContent(mapHtml);
     }
+
 
     @FXML
     void handleSaveMap(ActionEvent event) {
@@ -397,7 +400,8 @@ public class ViewController implements Initializable {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             // Save the CityMap data to the file
             // You can customize this based on your CityMap data structure and attributes
-            writer.println("<citymap>");
+            writer.println("<?xml version="+"1.0"+" encoding="+"UTF-8"+" standalone="+"no"+"?>");
+            writer.println("<map>");
             writer.println("    <warehouse address=\"" + cityMap.getWareHouseLocation().getId() + "\" />");
 
             for (Intersection intersection : cityMap.getIntersections()) {
@@ -406,19 +410,14 @@ public class ViewController implements Initializable {
                         "\" longitude=\"" + intersection.getLongitude() + "\" />");
             }
 
-            for (Chemin chemin : cityMap.getChemins()) {
-                writer.println("    <chemin debut=\"" + chemin.getDebut().getId() +
-                        "\" fin=\"" + chemin.getFin().getId() +
-                        "\" cout=\"" + chemin.getCout() + "\">");
-
-                for (int i = 0; i < chemin.getPi().length; i++) {
-                    writer.println("        <pi index=\"" + i + "\">" + chemin.getPi()[i] + "</pi>");
-                }
-
-                writer.println("    </chemin>");
+            for (RoadSegment segment : cityMap.getRoadSegments()) {
+                writer.println("    <segment origin=\"" + segment.getOrigin().getId() +
+                        "\" destination=\"" + segment.getDestination().getId() +
+                        "\" name=\"" + segment.getName() +
+                        "\" length=\"" + segment.getLength() + "\" />");
             }
 
-            writer.println("</citymap>");
+            writer.println("</map>");
         }
     }
 }
