@@ -64,6 +64,7 @@ public class RunDynamique {
         chemins.add(new Chemin(intersection4, intersection1, new int[]{5, 1, 2, 3, 4}, 4));
         chemins.add(new Chemin(intersection1, intersection4, new int[]{3, 2, 1, 5, 4}, 5));
 
+        // Création du graphe complet
         Graph g = new CompleteGraph(chemins,intersections);
 
         Dynamique dynamique = new Dynamique(g);
@@ -86,6 +87,11 @@ public class RunDynamique {
 
         System.out.printf("Length of the smallest hamiltonian circuit = %f\n", d);
         System.out.printf("Optimal Hamiltonian Circuit Path: %s\n", optimalPath);
+        List<Chemin> bestChemin = dynamique.bestCheminGlobal(chemins,g,optimalPath);
+        System.out.println("Meilleur chemin global :");
+        for (Chemin chemin : bestChemin) {
+            System.out.println(chemin);
+        }
     }
 }
 

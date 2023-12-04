@@ -1,9 +1,6 @@
 package fr.insalyonif.hubert.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Dynamique {
     private double[][] mat;
@@ -111,7 +108,49 @@ public class Dynamique {
         mem[i][s] = min;
         return min;
     }*/
+    public Chemin getCheminBy(List<Chemin> chemins, int debut, int fin) {
+        for (Chemin chemin : chemins) {
+            if (chemin.getDebut().getPos() == debut && chemin.getFin().getPos() == fin) {
+                return chemin;
+            }
+        }
+        // Retourner null si aucun chemin correspondant n'est trouvé
+        return null;
+    }
+    public List<Chemin> bestCheminGlobal(List<Chemin> chemins, Graph g, List<Integer> bestSol) {
+        List<Chemin> bestChemin = new ArrayList<>();
 
+        // Récupérer la HashMap associant les positions aux indices
+        Map<Integer, Integer> positionToIndex = g.getPositionToIndexMap();
+        System.out.println("Clés de la HashMap : " + positionToIndex.keySet());
+
+        for (int i = 0; i < bestSol.size() - 1; i++) {
+            int debutPosition = bestSol.get(i);
+            int finPosition = bestSol.get(i+1);
+            Integer cleTrouvee = null;
+            Integer cleTrouvee2 = null;
+            for (Map.Entry<Integer, Integer> entry : positionToIndex.entrySet()) {
+                if (entry.getValue().equals(debutPosition)) {
+                    cleTrouvee = entry.getKey();
+                    // On a trouvé la clé, on peut sortir de la boucle
+                }else if (entry.getValue().equals(finPosition)) {
+                    cleTrouvee2 = entry.getKey();
+                    // On a trouvé la clé, on peut sortir de la boucle
+                }
+                if(cleTrouvee!=null && cleTrouvee2!=null)break;
+            }
+
+            // Utiliser la HashMap pour obtenir l'indice associé à la position dans bestSol
+            Integer debutIndex = cleTrouvee;
+            Integer finIndex = cleTrouvee2;
+
+            Chemin chemin = getCheminBy(chemins, debutIndex, finIndex);
+            bestChemin.add(chemin);
+
+        }
+
+        return bestChemin;
+    }
     public List<Integer> findOptimalPath(int start, int n, Graph g, double[][] mem) {
         List<Integer> optimalPath = new ArrayList<>();
         reconstructPath(start, createSet(n), n, g, mem, optimalPath);
