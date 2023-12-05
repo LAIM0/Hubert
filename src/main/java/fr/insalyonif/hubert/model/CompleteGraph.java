@@ -53,7 +53,7 @@ public class CompleteGraph implements Graph {
 			int finIndex = positionToIndex.get(chemin.getFin().getPos());
 			double cout = chemin.getCout();
 
-			cost[debutIndex][finIndex] = cout;
+			cost[finIndex][debutIndex] = cout;
 
 		}
 
