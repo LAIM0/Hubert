@@ -2,6 +2,8 @@ package fr.insalyonif.hubert.model;
 
 import java.util.*;
 
+import static java.lang.Math.*;
+
 public class Dynamique {
     private double[][] mat;
 
@@ -166,8 +168,10 @@ public class Dynamique {
 
         for (int j = 1; j < n; j++) {
             if (isIn(j, s)) {
-                double remainingCost = mem[i][s] - g.getCost(i, j);
-                if (Double.compare(remainingCost, computeD(j, removeElement(s, j), n, g, mem)) == 0) {
+                double remainingCost = round((mem[i][s] - g.getCost(i, j)) * 1e6) / 1e6;
+//                System.out.println(remainingCost);
+//                System.out.println(computeD(j, removeElement(s, j), n, g, mem));
+                if (abs(Double.compare(remainingCost, computeD(j, removeElement(s, j), n, g, mem))) < 0.0000001) {
                     path.add(0, i);
                     reconstructPath(j, removeElement(s, j), n, g, mem, path);
                     break;

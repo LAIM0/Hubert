@@ -1,11 +1,11 @@
 package fr.insalyonif.hubert.controller;
 import fr.insalyonif.hubert.views.DeliveryIHMController;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+
+import java.util.*;
 
 import fr.insalyonif.hubert.model.*;
+
+import static fr.insalyonif.hubert.model.Dynamique.*;
 
 public class Controller {
     private CityMap cityMap;
@@ -105,20 +105,38 @@ public class Controller {
                 System.out.println(deliveryTour.getDijkstra().getChemins());
                 Graph g = new CompleteGraph(deliveryTour.getDijkstra().getChemins(), deliveryTour.getRequests(), cityMap);
 
+                Dynamique dynamique = new Dynamique(g);
+                int n = g.getNbVertices();
+                int s = dynamique.createSet(n);
+                double[][] memD = new double[n][s + 1];
+                for (int i = 0; i < n; i++) {
+                    Arrays.fill(memD[i], 0);
+                }
 
-                TSP tsp = new TSP1();
-                tsp.searchSolution(20000, g);
-                System.out.print("Solution of cost " + tsp.getSolutionCost());
-                for (int i = 0; i < listeDelivery.size(); i++)
-                    System.out.print(tsp.getSolution(i) + " ");
-                System.out.println("0");
-                List<Chemin> bestChemin = tsp.bestCheminGlobal(deliveryTour.getDijkstra().getChemins());
+                double d = computeD(0, s, n, g, memD);
+                List<Integer> optimalPath = dynamique.findOptimalPath(0, n, g, memD);
 
+                System.out.printf("Length of the smallest hamiltonian circuit = %f\n", d);
+                System.out.printf("Optimal Hamiltonian Circuit Path: %s\n", optimalPath);
+                List<Chemin> bestChemin = dynamique.bestCheminGlobal(deliveryTour.getDijkstra().getChemins(),g,optimalPath);
                 System.out.println("Meilleur chemin global :");
                 for (Chemin chemin : bestChemin) {
                     System.out.println(chemin);
-                    //System.out.println("Départ : " + chemin.getDebut() + " -> Arrivée : " + chemin.getFin()+ " | Coût : " + chemin.getCout());
                 }
+
+//                TSP tsp = new TSP1();
+//                tsp.searchSolution(20000, g);
+//                System.out.print("Solution of cost " + tsp.getSolutionCost());
+//                for (int i = 0; i < listeDelivery.size(); i++)
+//                    System.out.print(tsp.getSolution(i) + " ");
+//                System.out.println("0");
+//                List<Chemin> bestChemin = tsp.bestCheminGlobal(deliveryTour.getDijkstra().getChemins());
+//
+//                System.out.println("Meilleur chemin global :");
+//                for (Chemin chemin : bestChemin) {
+//                    System.out.println(chemin);
+//                    //System.out.println("Départ : " + chemin.getDebut() + " -> Arrivée : " + chemin.getFin()+ " | Coût : " + chemin.getCout());
+//                }
 
                 deliveryTour.setPaths(bestChemin);
                 MAJDeliveryPointList(idDeliveryTour);
