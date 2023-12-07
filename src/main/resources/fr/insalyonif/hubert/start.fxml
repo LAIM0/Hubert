@@ -20,7 +20,7 @@
         <Button fx:id="allDeliveries" layoutX="614.0" layoutY="499.0" onAction="#handleSeeAllDeliveries" prefHeight="61.0" prefWidth="241.0" style="-fx-background-color: #77B5FE;" stylesheets="@style.css" text="Load existing DeliveryTour" textFill="WHITE" />
         <Button layoutX="345.0" layoutY="499.0" onAction="#handleCreateNewDeliveries" prefHeight="61.0" prefWidth="241.0" style="-fx-background-color: #77B5FE;" stylesheets="@style.css" text="Create new DeliveryTour" textAlignment="CENTER" textFill="WHITE" />
         <!-- Additional controls, initially invisible -->
-        <DatePicker fx:id="datePicker" layoutX="200.0" layoutY="595.0" prefHeight="61.0" prefWidth="234.0" style="-fx-background-color: #77B5FE;" stylesheets="@style.css" visible="false" />
+        <DatePicker fx:id="datePicker" layoutX="345.0" layoutY="595.0" prefHeight="61.0" prefWidth="234.0" style="-fx-background-color: #77B5FE;" stylesheets="@style.css" visible="false" />
         <Button fx:id="fileLoader" layoutX="596.0" layoutY="595.0" onAction="#handleLoadFile" prefHeight="61.0" prefWidth="149.0" style="-fx-background-color: #77B5FE;" styleClass="btn-info" stylesheets="@style.css" text="Load DeliveryTour File" visible="false" />
         <!-- New button for starting -->
         <Button fx:id="start" layoutX="759.0" layoutY="595.0" onAction="#handleStart" prefHeight="61.0" prefWidth="96.0" style="-fx-background-color: #77B5FE;" styleClass="btn-info" stylesheets="@style.css" text="Start " visible="false" />
