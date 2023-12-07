@@ -151,7 +151,7 @@ public class ViewController implements Initializable {
             alert.showAndWait();
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Il faut d'abord choisir une MAP");
+            alert.setContentText("You need to load a map first");
             alert.showAndWait();
         }
     }

@@ -109,7 +109,7 @@ public class DeliveryIHMController implements Initializable {
                 } else {
                     // Gérer le cas où aucun créneau horaire n'est sélectionné
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("Il reste un champ vide :(");
+                    alert.setContentText("There is an empty field :(");
                     alert.showAndWait();
                     return;  // Sortir de la méthode si aucun créneau horaire n'est sélectionné
                 }
@@ -117,7 +117,7 @@ public class DeliveryIHMController implements Initializable {
                 stage.close();
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Pas un double");
+                alert.setContentText("Not a double number");
                 alert.showAndWait();
             }
 
