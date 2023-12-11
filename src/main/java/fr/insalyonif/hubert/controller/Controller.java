@@ -269,6 +269,7 @@ public class Controller {
                             Arrays.fill(memD[i], 0);
                         }
                         System.out.println(n);
+                        System.out.println(nextStart);
                         System.out.println(dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD));
                         if (dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD) < d8) {
                             d8 = dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD);
