@@ -834,4 +834,9 @@ public class ViewController implements Initializable {
         courier.setValue(controller.getListeDelivery().get(0).getCourier());
 
     }
+
+    public void handleMapClick(double lat, double lng) {
+        setLastClickedCoordinates(lat, lng);
+        //System.out.println("Latitude: " + lat + ", Longitude: " + lng);
+    }
 }
