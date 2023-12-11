@@ -271,42 +271,49 @@ public class ViewController implements Initializable {
     // Méthode pour calculer la distance entre deux points géographiques en utilisant la formule de Haversine
 
     private StringBuilder displayDeliveryPoints(DeliveryRequest target) {
-        Courier courrierComboBox =courier.getValue();
+        Courier selectedCourier = courier.getValue();
         StringBuilder markersJs = new StringBuilder();
-        String iconUrl   = "https://cdn-icons-png.flaticon.com/512/124/124434.png";
-        //https://api.iconify.design/mdi/map-marker.svg?color=%23ffae42
-        String markerJs = String.format(
+        String iconUrlWH   = "https://cdn-icons-png.flaticon.com/512/124/124434.png";
+        String iconUrlDP = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
+
+        String markerJsWH = String.format(
                 "var marker = L.marker([" + controller.getCityMap().getWareHouseLocation().getLatitude() + ", " +  controller.getCityMap().getWareHouseLocation().getLongitude() + "], {icon: L.icon({iconUrl: '%s', iconSize: [25, 35], iconAnchor: [15, 30]})}).addTo(map);"
-                        + "marker.bindTooltip('%s',{permanent:false}).openTooltip();", iconUrl, "Warehouse"
+                        + "marker.bindTooltip('%s',{permanent:false}).openTooltip();", iconUrlWH, "Warehouse"
         );
-        markersJs.append(markerJs);
+        markersJs.append(markerJsWH);
 
-        for( DeliveryTour deliveryTour : controller.getListeDelivery()) {
-            int i=0;
+        for (DeliveryTour deliveryTour : controller.getListeDelivery()) {
+            int i = 0;
             for (DeliveryRequest deliveryRequest : deliveryTour.getRequests()) {
-
-                markersJs.append(markerJs);
-                if (target != null && deliveryRequest.getDeliveryLocation().getId() == target.getDeliveryLocation().getId()) {
-                    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
-                    i++;
-                    markerJs = String.format(
-                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);"
-                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                            //deliveryRequest.getDeliveryLocation().getId()
-                            iconUrl, i
-                    );
+                String markerJs;
+                if (deliveryTour.getCourier().equals(selectedCourier)) {
+                    // Afficher les numéros seulement pour le coursier sélectionné
+                    if (target != null && deliveryRequest.getDeliveryLocation().getId() == target.getDeliveryLocation().getId()) {
+                        iconUrlDP = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
+                        i++;
+                        markerJs = String.format(
+                                "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);"
+                                        + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
+                                //deliveryRequest.getDeliveryLocation().getId()
+                                iconUrlDP, i
+                        );
+                    } else {
+                        iconUrlDP = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
+                        i++;
+                        markerJs = String.format(
+                                "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);"
+                                        + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
+                                //deliveryRequest.getDeliveryLocation().getId()
+                                iconUrlDP, i
+                        );
+                    }
                 } else {
-                    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
-                    i++;
+                    // Afficher les marqueurs sans numéros pour les autres coursiers
                     markerJs = String.format(
-                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);"
-                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                            //deliveryRequest.getDeliveryLocation().getId()
-                            iconUrl, i
+                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "], {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [7.5, 20]})}).addTo(map);",
+                            iconUrlDP
                     );
                 }
-
-
                 markersJs.append(markerJs);
             }
         }

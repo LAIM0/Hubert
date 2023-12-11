@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map fileName="largeMap" globalDate="2023-12-21" >
+    <warehouse address="25303831" />
+    <deliveryTour courier="0" startTime="null" endTime="null">
+        <deliveryRequest deliveryTime="2023-12-21T08:05:17Z" >
+            <deliveryLocation latitude="45.759624" longitude="4.8743205" id="208769047"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T08:14:13Z" >
+            <deliveryLocation latitude="45.753757" longitude="4.8719707" id="26317212"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T08:23:27Z" >
+            <deliveryLocation latitude="45.753757" longitude="4.8601513" id="2117622721"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T08:36:14Z" >
+            <deliveryLocation latitude="45.74121" longitude="4.8642025" id="18232178"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T08:50:44Z" >
+            <deliveryLocation latitude="45.74111" longitude="4.888338" id="365117230"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:03:55Z" >
+            <deliveryLocation latitude="45.754242" longitude="4.888009" id="1835868025"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:13:45Z" >
+            <deliveryLocation latitude="45.747402" longitude="4.882675" id="624172864"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+    </deliveryTour>
+    <deliveryTour courier="1" startTime="null" endTime="null">
+        <deliveryRequest deliveryTime="2023-12-21T09:00:00Z" >
+            <deliveryLocation latitude="45.747253" longitude="4.8703413" id="25321357"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:17:17Z" >
+            <deliveryLocation latitude="45.76138" longitude="4.8620934" id="3370328152"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:30:41Z" >
+            <deliveryLocation latitude="45.761814" longitude="4.8854713" id="459797873"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+    </deliveryTour>
+    <deliveryTour courier="2" startTime="null" endTime="null">
+        <deliveryRequest deliveryTime="2023-12-21T09:00:00Z" >
+            <deliveryLocation latitude="45.757706" longitude="4.870082" id="26316513"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:10:39Z" >
+            <deliveryLocation latitude="45.7512" longitude="4.8685937" id="195271"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:24:00Z" >
+            <deliveryLocation latitude="45.738" longitude="4.8714404" id="21702410"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-21T09:36:37Z" >
+            <deliveryLocation latitude="45.739338" longitude="4.883" id="21717907"/>
+            <timeWindow startTime="9" endTime="10" />
+        </deliveryRequest>
+    </deliveryTour>
+</map>
