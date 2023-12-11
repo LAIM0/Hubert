@@ -728,6 +728,13 @@ public class Controller {
 
                     listeDelivery.get(i).setPaths(bestChemin);
                     MAJDeliveryPointList(i);
+                    DeliveryRequest d =computeDeliveryTime(i);
+                    System.out.println("delivery a delete "+d);
+                    if(d!=null){
+                        deleteDelivery(deli,i);
+
+                        MAJDeliveryPointList(i);
+                    }
 
                 }
             }
