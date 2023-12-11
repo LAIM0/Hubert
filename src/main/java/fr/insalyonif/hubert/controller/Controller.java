@@ -107,7 +107,7 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+
 
         sizeGraph = cityMap.getIntersections().size(); // Mettez la taille correcte de votre graphe
         Dijkstra dij = new Dijkstra(sizeGraph, cityMap);
@@ -499,7 +499,7 @@ public class Controller {
                     DeliveryRequest d =computeDeliveryTime(idDeliveryTour);
                     System.out.println("delivery a delete "+d);
                     if(d!=null){
-                            deleteDelivery(deli,idDeliveryTour);
+                        //deleteDelivery(deli,idDeliveryTour);
 
                         MAJDeliveryPointList(idDeliveryTour);
                         return 3;
@@ -570,7 +570,6 @@ public class Controller {
 
     public Object[] findBestCourier(){
         int min = 9999;
-
         Courier bestCourier = new Courier(0);
         TimeWindow timeWindow =new TimeWindow(8,9);
         for(DeliveryTour deliveryTour : listeDelivery){
@@ -729,10 +728,7 @@ public class Controller {
                     listeDelivery.get(i).setPaths(bestChemin);
                     MAJDeliveryPointList(i);
                     DeliveryRequest d =computeDeliveryTime(i);
-                    System.out.println("delivery a delete "+d);
                     if(d!=null){
-                        deleteDelivery(deli,i);
-
                         MAJDeliveryPointList(i);
                     }
 
@@ -757,6 +753,7 @@ public class Controller {
         int i=0;
 
         for(DeliveryRequest deliveryRequest : deliveryRequests){
+            deliveryRequest.setGoOff(false);
             deliveryRequest.setDeliveryTime(null);
             long tempsPasse =(long) (deliveryTour.getPaths().get(i).getCout()/15000) *3600;
             System.out.println("cout" +tempsPasse);
@@ -776,23 +773,15 @@ public class Controller {
                 deliveryRequest.setDeliveryTime(instant);
                 instant = instant.plusSeconds(5 * 60);
                 i++;
-            } else if (instant.isBefore(endTimeWindow.plusSeconds(5*60))){
+            } else if (instant.isAfter(endTimeWindow)){
                 System.out.println("CACAAAA1");
                 deliveryRequest.setDeliveryTime(instant);
                 instant = instant.plusSeconds(5 * 60);
                 i++;
                 deliveryRequest.setGoOff(true);
-            }else{
-                System.out.println("");
-                System.out.println("test\n");
                 pb=deliveryRequest;
             }
         }
         return pb ;
     }
-
-
-
-
-
 }

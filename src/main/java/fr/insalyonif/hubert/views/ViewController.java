@@ -229,10 +229,20 @@ public class ViewController implements Initializable {
                             alert.setContentText("Point déjà présent dans la liste");
                             alert.showAndWait();
                         }else if(traceNewDeliveryPoint == 3){
+                            for (DeliveryRequest d :controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests()){
+                                if(d.isGoOff() && deliveryIHM.getTimeWindow().getStartTime()==d.getTimeWindow().getStartTime() ){
+                                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                                    alert.setContentText("The courier "+deliveryIHM.getCourier().getId()+" will be late for the time window "+d.getTimeWindow().getStartTime()+"h to "+d.getTimeWindow().getEndTime()+"h");
+                                    alert.showAndWait();
+                                    break;
+                                }
+                            }
+                            String markersJs = drawPaths(controller.getCityMap(), null);
+                            String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
+                            engine.loadContent(mapHtml);
+                            courier.setValue(deliveryIHM.getCourier());
+                            this.setDeliveryRequestIHM(controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests());
 
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("The courier "+deliveryIHM.getCourier().getId()+" is full beetween "+deliveryIHM.getTimeWindow().getStartTime()+"h and "+deliveryIHM.getTimeWindow().getEndTime()+"h");
-                            alert.showAndWait();
                         }
                     }
 
@@ -275,26 +285,26 @@ public class ViewController implements Initializable {
             int i=0;
             for (DeliveryRequest deliveryRequest : deliveryTour.getRequests()) {
 
-                    markersJs.append(markerJs);
-                    if (target != null && deliveryRequest.getDeliveryLocation().getId() == target.getDeliveryLocation().getId()) {
-                        iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
-                        i++;
-                        markerJs = String.format(
-                                "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);"
-                                        + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                                //deliveryRequest.getDeliveryLocation().getId()
-                                iconUrl, i
-                        );
-                    } else {
-                        iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
-                        i++;
-                        markerJs = String.format(
-                                "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);"
-                                        + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                                //deliveryRequest.getDeliveryLocation().getId()
-                                iconUrl, i
-                        );
-                    }
+                markersJs.append(markerJs);
+                if (target != null && deliveryRequest.getDeliveryLocation().getId() == target.getDeliveryLocation().getId()) {
+                    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
+                    i++;
+                    markerJs = String.format(
+                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);"
+                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
+                            //deliveryRequest.getDeliveryLocation().getId()
+                            iconUrl, i
+                    );
+                } else {
+                    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
+                    i++;
+                    markerJs = String.format(
+                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);"
+                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
+                            //deliveryRequest.getDeliveryLocation().getId()
+                            iconUrl, i
+                    );
+                }
 
 
                 markersJs.append(markerJs);
@@ -340,7 +350,7 @@ public class ViewController implements Initializable {
                     polylineCoords.append("[").append(chemin.getDebut().getLatitude()).append(", ").append(chemin.getDebut().getLongitude()).append("]");
                     polylineCoords.append("]");
 
-                    
+
 
                     if (deliveryTour.getCourier().getId() == courrierComboBox.getId()) {
                         if (deliveryRequest !=null && chemin.getFin() == deliveryRequest.getDeliveryLocation()) {
@@ -390,9 +400,9 @@ public class ViewController implements Initializable {
 
         // Filter the delivery tours for the selected courier
         DeliveryTour selectedTour = controller.getListeDelivery().stream()
-        .filter(tour -> tour.getCourier().equals(newCourier))
-        .findFirst()
-        .orElse(null);
+                .filter(tour -> tour.getCourier().equals(newCourier))
+                .findFirst()
+                .orElse(null);
 
         if (selectedTour != null) {
             setDeliveryRequestIHM(selectedTour.getRequests());
@@ -400,8 +410,8 @@ public class ViewController implements Initializable {
             String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
             engine.loadContent(mapHtml);
 
-            }
-         }
+        }
+    }
 
     @FXML
     void handleLoadMap(ActionEvent event) throws IOException {
@@ -441,25 +451,25 @@ public class ViewController implements Initializable {
 
     void loadMap(LocalDate datePicker, String selectedFilePath ) {
 
-                // Load the selected XML map file
-                controller = new Controller(selectedFilePath);
-                setCourierIHM(controller.getListeDelivery());
-                controller.setGlobalDate(datePicker);
-                System.out.println("passe");
+        // Load the selected XML map file
+        controller = new Controller(selectedFilePath);
+        setCourierIHM(controller.getListeDelivery());
+        controller.setGlobalDate(datePicker);
+        System.out.println("passe");
 
-                dateLabel.setText(String.valueOf(datePicker));
+        dateLabel.setText(String.valueOf(datePicker));
 
-                // Convertir la chaîne en objet Path
-                Path path = Paths.get(selectedFilePath);
-                // Obtenir le nom du fichier
-                String fileName = path.getFileName().toString();
-                fileNameLabel.setText(fileName);
+        // Convertir la chaîne en objet Path
+        Path path = Paths.get(selectedFilePath);
+        // Obtenir le nom du fichier
+        String fileName = path.getFileName().toString();
+        fileNameLabel.setText(fileName);
 
 
-                String markersJs = displayDeliveryPoints(null).toString();
-                String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
+        String markersJs = displayDeliveryPoints(null).toString();
+        String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
 
-                engine.loadContent(mapHtml);
+        engine.loadContent(mapHtml);
     }
 
 
@@ -615,30 +625,30 @@ public class ViewController implements Initializable {
         // Lien entre le Javascript et Java
         engine.setJavaScriptEnabled(true);
         engine.getLoadWorker().stateProperty().addListener(
-            (observable, oldValue, newValue) -> {
-                if (Worker.State.SUCCEEDED.equals(newValue)) {
-                    JSObject window = (JSObject) engine.executeScript("window");
-                    window.setMember("javaApp", this);
+                (observable, oldValue, newValue) -> {
+                    if (Worker.State.SUCCEEDED.equals(newValue)) {
+                        JSObject window = (JSObject) engine.executeScript("window");
+                        window.setMember("javaApp", this);
+                    }
                 }
-            }
         );
 
         listCourier= FXCollections.observableArrayList();
 
 
         courier.setConverter(new StringConverter<Courier>() {
-           @Override
-           public String toString(Courier c) {
-               if(c==null){
-                   return "";
-               }
-               return "Courrier "+c.getId();
-           }
+            @Override
+            public String toString(Courier c) {
+                if(c==null){
+                    return "";
+                }
+                return "Courrier "+c.getId();
+            }
 
-           @Override
-           public Courier fromString(String s) {
-               return null;
-           }
+            @Override
+            public Courier fromString(String s) {
+                return null;
+            }
         });
         courier.setItems(listCourier);
 
@@ -720,18 +730,18 @@ public class ViewController implements Initializable {
         //System.out.println(controller.getListeDelivery().get(0).getStartTime());
         // Construction du nom de fichier
 
-        
+
         String fileName = String.format("Deliveries_%s_%s.xml", controller.getGlobalDate(), controller.getFileName());
 
         // Get the current working directory
         String workingDir = System.getProperty("user.dir");
-        
+
         // Construct the file path
         Path filePath = Paths.get(workingDir, "archives", fileName);
 
         // Create the file
         File file = new File(filePath.toString());
-        
+
 
         // Écriture dans le fichier
         try (FileWriter fileWriter = new FileWriter(file);
@@ -766,7 +776,7 @@ public class ViewController implements Initializable {
     }
 
     public void displayAllTheDeliveryPoints(){
-        
+
         String markersJs = drawPaths(controller.getCityMap(), null);
         String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
         engine.loadContent(mapHtml);
@@ -775,6 +785,4 @@ public class ViewController implements Initializable {
         courier.setValue(controller.getListeDelivery().get(0).getCourier());
 
     }
-
-
 }

@@ -35,7 +35,7 @@
             <Button layoutX="959.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleSaveMap" styleClass="btn-primary" text="Save current Delivery Tour" />
          </children>
       </Pane>
-        <Label fx:id="dateLabel" layoutX="87.0" layoutY="99.0" prefHeight="17.0" prefWidth="107.0" text="" /> <!-- Ajoutez cette ligne -->
+        <Label fx:id="dateLabel" layoutX="63.0" layoutY="108.0" prefHeight="17.0" prefWidth="107.0" text="" /> <!-- Ajoutez cette ligne -->
         <Label fx:id="fileNameLabel" layoutX="63.0" layoutY="131.0" prefHeight="17.0" prefWidth="156.0" text="" /> <!-- Ajoutez cette ligne -->
       <WebView id="webView" fx:id="webView" layoutX="58.0" layoutY="164.0" prefWidth="600.0" />
       <Button fx:id="validate_delivery" layoutX="541.0" layoutY="116.0" mnemonicParsing="false" onAction="#handleOpenNewWindow" prefHeight="29.0" prefWidth="117.0" style="-fx-background-color: B6DA9F;" text="Validate point" textFill="WHITE" />
