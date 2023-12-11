@@ -1,10 +1,8 @@
 package fr.insalyonif.hubert.model;
 
-
-
 /**
- * Représente un segment de route dans une carte de ville.
- * Chaque segment est défini par une origine, une destination, un nom et une longueur.
+ * Represents a road segment in a city map.
+ * Each segment is defined by an origin, a destination, a name, and a length.
  */
 public class RoadSegment {
     private Intersection origin;
@@ -13,12 +11,12 @@ public class RoadSegment {
     private double length;
 
     /**
-     * Constructeur pour créer un nouveau segment de route.
+     * Constructor to create a new road segment.
      *
-     * @param origin l'intersection d'origine du segment de route.
-     * @param destination l'intersection de destination du segment de route.
-     * @param name le nom du segment de route.
-     * @param length la longueur du segment de route, en kilomètres.
+     * @param origin      The origin intersection of the road segment.
+     * @param destination The destination intersection of the road segment.
+     * @param name        The name of the road segment.
+     * @param length      The length of the road segment in kilometers.
      */
     public RoadSegment(Intersection origin, Intersection destination, String name, double length) {
         this.origin = origin;
@@ -28,81 +26,81 @@ public class RoadSegment {
     }
 
     /**
-     * Retourne l'intersection d'origine du segment de route.
+     * Returns the origin intersection of the road segment.
      *
-     * @return l'intersection d'origine.
+     * @return The origin intersection.
      */
     public Intersection getOrigin() {
         return origin;
     }
 
     /**
-     * Retourne l'intersection de destination du segment de route.
+     * Returns the destination intersection of the road segment.
      *
-     * @return l'intersection de destination.
+     * @return The destination intersection.
      */
     public Intersection getDestination() {
         return destination;
     }
 
     /**
-     * Retourne le nom du segment de route.
+     * Returns the name of the road segment.
      *
-     * @return le nom du segment.
+     * @return The name of the segment.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Retourne la longueur du segment de route.
+     * Returns the length of the road segment.
      *
-     * @return la longueur du segment, en kilomètres.
+     * @return The length of the segment in kilometers.
      */
     public double getLength() {
         return length;
     }
 
     /**
-     * Définit l'intersection d'origine du segment de route.
+     * Sets the origin intersection of the road segment.
      *
-     * @param origin la nouvelle intersection d'origine.
+     * @param origin The new origin intersection.
      */
     public void setOrigin(Intersection origin) {
         this.origin = origin;
     }
 
     /**
-     * Définit l'intersection de destination du segment de route.
+     * Sets the destination intersection of the road segment.
      *
-     * @param destination la nouvelle intersection de destination.
+     * @param destination The new destination intersection.
      */
     public void setDestination(Intersection destination) {
         this.destination = destination;
     }
 
     /**
-     * Définit le nom du segment de route.
+     * Sets the name of the road segment.
      *
-     * @param name le nouveau nom du segment.
+     * @param name The new name of the segment.
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Définit la longueur du segment de route.
+     * Sets the length of the road segment.
      *
-     * @param length la nouvelle longueur du segment, en kilomètres.
+     * @param length The new length of the segment in kilometers.
      */
     public void setLength(double length) {
         this.length = length;
     }
 
     /**
-     * Retourne une représentation en chaîne de caractères du segment de route.
+     * Returns a string representation of the road segment.
      *
-     * @return la représentation textuelle du segment de route.
+     * @return The textual representation of the road segment.
      */
     @Override
     public String toString() {

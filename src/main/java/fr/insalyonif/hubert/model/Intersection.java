@@ -1,17 +1,15 @@
 package fr.insalyonif.hubert.model;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Représente une intersection dans une carte de ville.
- * Chaque intersection est définie par ses coordonnées géographiques,
- * un identifiant unique et une position. Elle peut également avoir des segments de route
- * qui la précèdent et la suivent.
+ * Represents an intersection in a city map.
+ * Each intersection is defined by its geographical coordinates,
+ * a unique identifier, and a position. It may also have road segments
+ * that precede and follow it.
  */
-public class Intersection implements Comparable<Intersection>{
+public class Intersection implements Comparable<Intersection> {
     private double latitude;
     private double longitude;
     private List<RoadSegment> predecessors;
@@ -20,143 +18,143 @@ public class Intersection implements Comparable<Intersection>{
     private int pos;
 
     /**
-     * Constructeur pour créer une nouvelle intersection.
+     * Constructor to create a new intersection.
      *
-     * @param latitude la latitude de l'intersection.
-     * @param longitude la longitude de l'intersection.
-     * @param id l'identifiant unique de l'intersection.
-     * @param pos la position de l'intersection dans un contexte spécifique (par exemple, dans une liste).
+     * @param latitude  The latitude of the intersection.
+     * @param longitude The longitude of the intersection.
+     * @param id        The unique identifier of the intersection.
+     * @param pos       The position of the intersection in a specific context (e.g., in a list).
      */
     public Intersection(double latitude, double longitude, long id, int pos) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.predecessors = new ArrayList<>();;
-        this.successors = new ArrayList<>();;
+        this.predecessors = new ArrayList<>();
+        this.successors = new ArrayList<>();
         this.id = id;
         this.pos = pos;
     }
 
     /**
-     * Retourne la latitude de l'intersection.
+     * Returns the latitude of the intersection.
      *
-     * @return la latitude.
+     * @return The latitude.
      */
     public double getLatitude() {
         return latitude;
     }
 
     /**
-     * Définit la latitude de l'intersection.
+     * Sets the latitude of the intersection.
      *
-     * @param latitude la nouvelle latitude.
+     * @param latitude The new latitude.
      */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
     /**
-     * Retourne la longitude de l'intersection.
+     * Returns the longitude of the intersection.
      *
-     * @return la longitude.
+     * @return The longitude.
      */
     public double getLongitude() {
         return longitude;
     }
 
     /**
-     * Définit la longitude de l'intersection.
+     * Sets the longitude of the intersection.
      *
-     * @param longitude la nouvelle longitude.
+     * @param longitude The new longitude.
      */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
     /**
-     * Retourne la liste des segments de route précédant l'intersection.
+     * Returns the list of road segments preceding the intersection.
      *
-     * @return la liste des prédécesseurs.
+     * @return The list of predecessors.
      */
     public List<RoadSegment> getPredecessors() {
         return predecessors;
     }
 
     /**
-     * Définit la liste des segments de route précédant l'intersection.
+     * Sets the list of road segments preceding the intersection.
      *
-     * @param predecessors la nouvelle liste des prédécesseurs.
+     * @param predecessors The new list of predecessors.
      */
     public void setPredecessors(List<RoadSegment> predecessors) {
         this.predecessors = predecessors;
     }
 
     /**
-     * Retourne la liste des segments de route suivant l'intersection.
+     * Returns the list of road segments following the intersection.
      *
-     * @return la liste des successeurs.
+     * @return The list of successors.
      */
     public List<RoadSegment> getSuccessors() {
         return successors;
     }
 
     /**
-     * Définit la liste des segments de route suivant l'intersection.
+     * Sets the list of road segments following the intersection.
      *
-     * @param successors la nouvelle liste des successeurs.
+     * @param successors The new list of successors.
      */
     public void setSuccessors(List<RoadSegment> successors) {
         this.successors = successors;
     }
 
     /**
-     * Retourne une représentation en chaîne de caractères des coordonnées de l'intersection.
+     * Returns a string representation of the coordinates of the intersection.
      *
-     * @return les coordonnées sous forme de chaîne de caractères.
+     * @return The coordinates as a string.
      */
     public String getCoordinates() {
         return "lat: " + this.latitude + " ; lng: " + this.longitude;
     }
 
     /**
-     * Retourne l'identifiant unique de l'intersection.
+     * Returns the unique identifier of the intersection.
      *
-     * @return l'identifiant.
+     * @return The identifier.
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Définit l'identifiant unique de l'intersection.
+     * Sets the unique identifier of the intersection.
      *
-     * @param id le nouvel identifiant.
+     * @param id The new identifier.
      */
     public void setId(long id) {
         this.id = id;
     }
 
     /**
-     * Retourne la position de l'intersection.
+     * Returns the position of the intersection.
      *
-     * @return la position.
+     * @return The position.
      */
     public int getPos() {
         return pos;
     }
 
     /**
-     * Définit la position de l'intersection.
+     * Sets the position of the intersection.
      *
-     * @param pos la nouvelle position.
+     * @param pos The new position.
      */
     public void setPos(int pos) {
         this.pos = pos;
     }
 
     /**
-     * Retourne une représentation en chaîne de caractères de l'intersection.
+     * Returns a string representation of the intersection.
      *
-     * @return la représentation textuelle de l'intersection.
+     * @return The textual representation of the intersection.
      */
     @Override
     public String toString() {
@@ -174,5 +172,4 @@ public class Intersection implements Comparable<Intersection>{
         // For example, you can compare based on the intersection's position.
         return Integer.compare(this.getPos(), other.getPos());
     }
-
 }

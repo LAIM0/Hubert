@@ -19,7 +19,9 @@ import java.net.URL;
 import java.time.*;
 import java.util.ResourceBundle;
 
-
+/**
+ * The DeliveryIHMController class is responsible for handling the user interface logic for delivery input.
+ */
 public class DeliveryIHMController implements Initializable {
 
     ObservableList<TimeWindow> timeWindows = FXCollections.observableArrayList(
@@ -61,7 +63,11 @@ public class DeliveryIHMController implements Initializable {
 
     private boolean isValiderClicked = false;
 
-
+    /**
+     * Handles the action when the "Valider" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     void validerButton(ActionEvent event) {
         if(event.getSource()==valider) {
@@ -119,30 +125,67 @@ public class DeliveryIHMController implements Initializable {
         }
     }
 
+    /**
+     * Checks if the "Valider" button is clicked.
+     *
+     * @return True if the button is clicked, false otherwise.
+     */
     public boolean isValiderClicked() {
         return isValiderClicked;
     }
 
+    /**
+     * Gets the latitude as a double.
+     *
+     * @return The latitude value.
+     */
     public double getLatDouble() {
         return latDouble;
     }
 
+    /**
+     * Gets the longitude as a double.
+     *
+     * @return The longitude value.
+     */
     public double getLngDouble() {
         return lngDouble;
     }
 
+    /**
+     * Gets the selected time window.
+     *
+     * @return The selected time window.
+     */
     public TimeWindow getTimeWindow() {
         return timeWindow;
     }
 
+    /**
+     * Sets the latitude value in the text field.
+     *
+     * @param lat The latitude value to set.
+     */
     public void setLat(double lat) {
         this.lat.setText(String.valueOf(lat));
     }
 
+    /**
+     * Sets the longitude value in the text field.
+     *
+     * @param lng The longitude value to set.
+     */
     public void setLng(double lng) {
         this.lng.setText(String.valueOf(lng));
     }
 
+
+    /**
+     * Initializes the controller with default values and sets up the ComboBox for couriers.
+     *
+     * @param url            The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         deliveryTime.setItems(timeWindows);
@@ -165,17 +208,38 @@ public class DeliveryIHMController implements Initializable {
 
     }
 
+    /**
+     * Gets the selected courier.
+     *
+     * @return The selected courier.
+     */
     public Courier getCourier() {
         return courier.getValue();
     }
 
+    /**
+     * Sets the initial courier value.
+     *
+     * @param initCourier The initial courier value.
+     */
     public void setInitialCourier(Courier initCourier){
         this.courier.setValue(initCourier);
     }
+
+    /**
+     * Sets the initial time window value.
+     *
+     * @param timeWindow The initial time window value.
+     */
     public void setInitialTimeWindow(TimeWindow timeWindow){
         this.deliveryTime.setValue((timeWindow));
     }
 
+    /**
+     * Sets the list of couriers for the ComboBox.
+     *
+     * @param list The list of couriers.
+     */
     public void setListCourier(ObservableList<Courier> list){
         listCourier=list;
         courier.setItems(listCourier);

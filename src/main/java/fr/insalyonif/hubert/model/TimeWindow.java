@@ -1,22 +1,21 @@
 package fr.insalyonif.hubert.model;
-import java.time.Instant;
+
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 /**
- * Représente une fenêtre temporelle définie par un instant de début et un instant de fin.
- * Cette classe est utile pour gérer des périodes définies dans le temps.
+ * Represents a time window defined by a start instant and an end instant.
+ * This class is useful for managing time-defined periods.
  */
 public class TimeWindow {
     private int startTime;
     private int endTime;
 
     /**
-     * Constructeur pour créer une nouvelle fenêtre temporelle.
+     * Constructor to create a new time window.
      *
-     * @param startTime l'instant de début de la fenêtre temporelle.
-     * @param endTime l'instant de fin de la fenêtre temporelle.
+     * @param startTime The start instant of the time window.
+     * @param endTime   The end instant of the time window.
      */
     public TimeWindow(int startTime, int endTime) {
         this.startTime = startTime;
@@ -24,67 +23,62 @@ public class TimeWindow {
     }
 
     /**
-     * Retourne l'instant de début de la fenêtre temporelle.
+     * Returns the start instant of the time window.
      *
-     * @return l'instant de début.
+     * @return The start instant.
      */
     public int getStartTime() {
         return startTime;
     }
 
     /**
-     * Définit l'instant de début de la fenêtre temporelle.
+     * Sets the start instant of the time window.
      *
-     * @param startTime le nouvel instant de début.
+     * @param startTime The new start instant.
      */
     public void setStartTime(int startTime) {
         this.startTime = startTime;
     }
 
     /**
-     * Retourne l'instant de fin de la fenêtre temporelle.
+     * Returns the end instant of the time window.
      *
-     * @return l'instant de fin.
+     * @return The end instant.
      */
     public int getEndTime() {
         return endTime;
     }
 
     /**
-     * Définit l'instant de fin de la fenêtre temporelle.
+     * Sets the end instant of the time window.
      *
-     * @param endTime le nouvel instant de fin.
+     * @param endTime The new end instant.
      */
     public void setEndTime(int endTime) {
         this.endTime = endTime;
     }
 
     /**
-     * Retourne une représentation en chaîne de caractères de la fenêtre temporelle.
+     * Returns a string representation of the time window.
      *
-     * @return la représentation textuelle de la fenêtre temporelle.
+     * @return The textual representation of the time window.
      */
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH").withZone(ZoneId.systemDefault());
 
-        // Formater les instants de début et de fin
-        /*String startTimeFormatted = formatter.format(startTime);
-        String endTimeFormatted = formatter.format(endTime);*/
 
         // Retourner la représentation en chaîne de la fenêtre temporelle avec la mention spécifique
         return "Passage entre " + startTime + "h et " + endTime+"h";
     }
 
-
-
     /**
-     * Vérifie si un instant spécifique se situe à l'intérieur de la fenêtre temporelle.
+     * Checks if a specific instant is inside the time window.
      *
-     * @param time l'instant à vérifier.
-     * @return true si l'instant est à l'intérieur de la fenêtre temporelle, false sinon.
+     * @param time The instant to check.
+     * @return True if the instant is inside the time window, false otherwise.
      */
-    public boolean isInTimeWindow(int time){
-        return (time<endTime && time>=startTime);
+    public boolean isInTimeWindow(int time) {
+        return (time < endTime && time >= startTime);
     }
 }

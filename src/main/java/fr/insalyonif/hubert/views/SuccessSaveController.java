@@ -3,6 +3,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
+/**
+ * The SuccessSaveController class is responsible for showing to the user that the deliveries have been saved.
+ */
 public class SuccessSaveController {
 
     @FXML
@@ -11,7 +14,9 @@ public class SuccessSaveController {
     @FXML
     private Label messageLabel;
 
+    /**
+     * Initializes the controller.
+     */
     public void initialize() {
-        // You can perform initialization here if needed
     }
 }

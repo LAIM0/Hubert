@@ -36,6 +36,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The StartController class is responsible for handling user interactions for starting the application.
+ */
 public class StartController {
 
     @FXML
@@ -62,13 +65,21 @@ public class StartController {
     // Variable to store the selected file path
     private String selectedFilePath;
 
+    /**
+     * Initializes the controller.
+     */
     public void initialize() {
     }
 
+    /**
+     * Handles the event when the "See All Deliveries" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws Exception If an error occurs during the loading of the FXML file.
+     */
     @FXML
     public void handleSeeAllDeliveries(ActionEvent event) throws Exception {
         selectedFilePath = "";
-        // TO DO choisir le fichier à reprendre
         // Create a FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -77,7 +88,6 @@ public class StartController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        //getClass().getResource("/fr/insalyonif/hubert/successSave.fxml")
 
 
         // Show open file dialog
@@ -104,7 +114,6 @@ public class StartController {
             Element map = (Element) doc.getElementsByTagName("map").item(0);
             Element deliveryTour = (Element) doc.getElementsByTagName("deliveryTour").item(0);
 
-            //TO DO : si map est null alors erreur
             if (map == null || deliveryTour == null){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Ce fichier ne correspond pas :(");
@@ -116,24 +125,12 @@ public class StartController {
             String fileName = map.getAttribute("fileName");
             LocalDate fileDate = LocalDate.parse(map.getAttribute("globalDate"));
 
-
-            //System.out.println("fileName File: " + fileName);
-            //System.out.println("fileDate File: " + fileDate);
-
-            // Use Path to extract file name and extension
-            //Path path = Paths.get(selectedFilePath);
-            //String fileName = path.getFileName().toString(); // Extracts the file name
-
-            //String[] fileNameParts = fileName.split("_");
-            //String lastWord = fileNameParts[fileNameParts.length - 1];
-
             String stratPath = "src/main/resources/fr/insalyonif/hubert/fichiersXML2022/";
             String pathMap = stratPath + fileName + ".xml";
             System.out.println("Path of the map: " + pathMap);
 
             Path path = Paths.get(pathMap);
             if (!Files.exists(path)) {
-                //throw new IllegalArgumentException("The map doesn't exist : " + pathMap);
                 // Show an error popup if no file is selected
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("The map doesnt exist");
@@ -142,17 +139,6 @@ public class StartController {
                 alert.showAndWait();
                 return;
             }
-
-            // Extract date from the file name
-            //String datePattern = "yyyy-MM-dd"; // Adjust the pattern based on the actual date format in the file name
-            //DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
-
-            // Extract the date substring from the file name
-            //String dateString = fileName.substring(11, 21); // Adjust indices based on the actual position of the date in the file name
-
-            // Parse the date string to LocalDate
-            //LocalDate fileDate = LocalDate.parse(dateString, dateFormatter);
-            //System.out.println("File Date: " + fileDate);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/insalyonif/hubert/ihm.fxml"));
             Parent root = loader.load();
@@ -172,7 +158,11 @@ public class StartController {
     }
 
 
-
+    /**
+     * Handles the event when the "Create New Deliveries" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     private void handleCreateNewDeliveries(ActionEvent event) {
         selectedFilePath = "";
@@ -186,6 +176,11 @@ public class StartController {
         message.setVisible(true);
     }
 
+    /**
+     * Handles the event when the "Load File" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     private void handleLoadFile(ActionEvent event) throws SAXException, IOException, ParserConfigurationException {
         // Create a FileChooser
@@ -239,10 +234,15 @@ public class StartController {
         }
     }
 
+    /**
+     * Handles the event when the "Start" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an error occurs during the loading of the FXML file.
+     */
     @FXML
     private void handleStart(ActionEvent event) throws IOException {
         // Récupérer la date du DatePicker
-        //start.setVisible(true);
         if (datePicker.getValue()==null || Objects.equals(selectedFilePath, null) || Objects.equals(selectedFilePath, "")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File Loading Failed");

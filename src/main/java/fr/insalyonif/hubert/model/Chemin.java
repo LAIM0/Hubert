@@ -2,19 +2,23 @@ package fr.insalyonif.hubert.model;
 
 import java.util.Arrays;
 
+/**
+ * Represents a path between two intersections in a city map.
+ * Provides information about the start and end intersections, the path indices, and the total cost.
+ */
 public class Chemin {
-    private Intersection debut;
-    private Intersection fin;
-    private int[] pi;
-    private double cout;
+    private Intersection debut; // Start intersection of the path
+    private Intersection fin;   // End intersection of the path
+    private int[] pi;           // Array representing the path in terms of indices of visited intersections
+    private double cout;        // Total cost of the path
 
     /**
-     * Constructeur de la classe Chemin.
+     * Constructor for the Chemin class.
      *
-     * @param debut L'Intersection de départ du chemin.
-     * @param fin L'Intersection de fin du chemin.
-     * @param pi Un tableau représentant le chemin en termes d'indices des intersections visitées.
-     * @param cout Le coût total du chemin.
+     * @param debut The starting intersection of the path.
+     * @param fin The ending intersection of the path.
+     * @param pi An array representing the path in terms of indices of visited intersections.
+     * @param cout The total cost of the path.
      */
     public Chemin(Intersection debut, Intersection fin, int[] pi, double cout) {
         this.debut = debut;
@@ -24,81 +28,81 @@ public class Chemin {
     }
 
     /**
-     * Obtient l'Intersection de départ du chemin.
+     * Gets the starting intersection of the path.
      *
-     * @return L'Intersection de départ du chemin.
+     * @return The starting intersection of the path.
      */
     public Intersection getDebut() {
         return debut;
     }
 
     /**
-     * Obtient l'Intersection de fin du chemin.
+     * Gets the ending intersection of the path.
      *
-     * @return L'Intersection de fin du chemin.
+     * @return The ending intersection of the path.
      */
     public Intersection getFin() {
         return fin;
     }
 
     /**
-     * Obtient le tableau représentant le chemin en termes d'indices des intersections visitées.
+     * Gets the array representing the path in terms of indices of visited intersections.
      *
-     * @return Le tableau d'indices représentant le chemin.
+     * @return The array of indices representing the path.
      */
     public int[] getPi() {
         return pi;
     }
 
     /**
-     * Obtient le coût total du chemin.
+     * Gets the total cost of the path.
      *
-     * @return Le coût total du chemin.
+     * @return The total cost of the path.
      */
     public double getCout() {
         return cout;
     }
 
     /**
-     * Modifie l'Intersection de départ du chemin.
+     * Sets the starting intersection of the path.
      *
-     * @param debut La nouvelle Intersection de départ du chemin.
+     * @param debut The new starting intersection of the path.
      */
     public void setDebut(Intersection debut) {
         this.debut = debut;
     }
 
     /**
-     * Modifie l'Intersection de fin du chemin.
+     * Sets the ending intersection of the path.
      *
-     * @param fin La nouvelle Intersection de fin du chemin.
+     * @param fin The new ending intersection of the path.
      */
     public void setFin(Intersection fin) {
         this.fin = fin;
     }
 
     /**
-     * Modifie le tableau représentant le chemin en termes d'indices des intersections visitées.
+     * Sets the array representing the path in terms of indices of visited intersections.
      *
-     * @param pi Le nouveau tableau d'indices représentant le chemin.
+     * @param pi The new array of indices representing the path.
      */
     public void setPi(int[] pi) {
         this.pi = pi;
     }
 
     /**
-     * Modifie le coût total du chemin.
+     * Sets the total cost of the path.
      *
-     * @param cout Le nouveau coût total du chemin.
+     * @param cout The new total cost of the path.
      */
     public void setCout(double cout) {
         this.cout = cout;
     }
 
     /**
-     * Retourne une représentation sous forme de chaîne de caractères du chemin.
+     * Returns a string representation of the path.
      *
-     * @return Une chaîne de caractères représentant le chemin.
+     * @return A string representing the path.
      */
     @Override
     public String toString() {

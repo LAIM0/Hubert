@@ -14,9 +14,9 @@ import java.io.PrintWriter;
 
 
 /**
- * Représente une carte de ville avec un ensemble d'intersections et l'emplacement d'un entrepôt.
- * Fournit des méthodes pour gérer les intersections, définir l'emplacement de l'entrepôt,
- * et charger les données à partir d'un fichier XML.
+ * Represents a city map with a set of intersections and the location of a warehouse.
+ * Provides methods for managing intersections, defining the warehouse location,
+ * and loading data from an XML file.
  */
 public class CityMap {
     private List<Intersection> intersections;
@@ -24,119 +24,109 @@ public class CityMap {
     //private List<Chemin> chemins; // List to store Chemin objects
 
     /**
-     * Constructeur par défaut qui initialise la liste des intersections.
+     * Default constructor that initializes the list of intersections.
      */
     public CityMap() {
         this.intersections = new ArrayList<>();
     }
-    
-    //   // Getter for chemins
-    //   public List<Chemin> getChemins() {
-    //     return chemins;
-    // }
-
-    //   // Getter for chemins
-    //   public void setChemins(List<Chemin>paths ) {
-    //     chemins=paths;
-    // }
 
     /**
-     * Retourne la liste des intersections de la ville.
+     * Returns the list of intersections in the city.
      *
-     * @return la liste des intersections.
+     * @return the list of intersections.
      */
     public List<Intersection> getIntersections() {
         return intersections;
     }
 
     /**
-     * Définit la liste des intersections de la ville.
+     * Sets the list of intersections in the city.
      *
-     * @param intersections la nouvelle liste des intersections.
+     * @param intersections the new list of intersections.
      */
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
     /**
-     * Retourne l'emplacement de l'entrepôt.
+     * Returns the location of the warehouse.
      *
-     * @return l'intersection représentant l'emplacement de l'entrepôt.
+     * @return the intersection representing the warehouse location.
      */
     public Intersection getWareHouseLocation() {
         return wareHouseLocation;
     }
 
     /**
-     * Définit l'emplacement de l'entrepôt.
+     * Sets the location of the warehouse.
      *
-     * @param wareHouseLocation l'intersection représentant le nouvel emplacement de l'entrepôt.
+     * @param wareHouseLocation the intersection representing the new warehouse location.
      */
     public void setWareHouseLocation(Intersection wareHouseLocation) {
         this.wareHouseLocation = wareHouseLocation;
     }
 
     /**
-     * Charge les données de la carte à partir d'un fichier XML.
-     * Parse le fichier et initialise les intersections et segments de route.
+     * Loads map data from an XML file.
+     * Parses the file and initializes intersections and road segments.
      *
-     * @param filename le chemin du fichier XML à charger.
-     * @throws Exception si une erreur survient pendant le chargement ou le parsing du fichier.
+     * @param filename the path of the XML file to load.
+     * @throws Exception if an error occurs during file loading or parsing.
      */
     public void loadFromXML(String filename) throws Exception {
-        // Création d'une instance de File pour le fichier XML
+        // Create an instance of File for the XML file
         File xmlFile = new File(filename);
 
-        // Initialisation du constructeur de documents XML
+        // Initialize the XML document builder
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        // Parsing du document XML
+        // Parse the XML document
         Document doc = dBuilder.parse(xmlFile);
 
-        // Normalisation du document XML pour éliminer les espaces blancs inutiles
+        // Normalize the XML document to eliminate unnecessary white spaces
         doc.getDocumentElement().normalize();
 
-        // Utilisation d'une Map pour stocker les intersections avec leur ID comme clé
+        // Use a Map to store intersections with their ID as the key
         Map<Long, Intersection> intersectionMap = new HashMap<>();
 
-        // Traitement des éléments "intersection" du XML
+        // Process "intersection" elements in the XML
         NodeList intersectionList = doc.getElementsByTagName("intersection");
         for (int i = 0; i < intersectionList.getLength(); i++) {
             Element intersectionElement = (Element) intersectionList.item(i);
 
-            // Extraction des attributs de chaque intersection
+            // Extract attributes of each intersection
             long id = Long.parseLong(intersectionElement.getAttribute("id"));
             double latitude = Double.parseDouble(intersectionElement.getAttribute("latitude"));
             double longitude = Double.parseDouble(intersectionElement.getAttribute("longitude"));
 
-            // Création d'un nouvel objet Intersection et ajout dans la Map et la liste
+            // Create a new Intersection object and add it to the Map and the list
             Intersection intersection = new Intersection(latitude, longitude, id, i);
             intersectionMap.put(id, intersection);
             this.intersections.add(intersection);
         }
 
-        // Traitement de l'élément "warehouse" pour définir l'emplacement de l'entrepôt
+        // Process "warehouse" element to set the warehouse location
         Element warehouse = (Element) doc.getElementsByTagName("warehouse").item(0);
         long warehouseId = Long.parseLong(warehouse.getAttribute("address"));
         this.wareHouseLocation = intersectionMap.get(warehouseId);
 
-        // Traitement des éléments "segment" du XML
+        // Process "segment" elements in the XML
         NodeList segmentList = doc.getElementsByTagName("segment");
         for (int i = 0; i < segmentList.getLength(); i++) {
             Element segmentElement = (Element) segmentList.item(i);
 
-            // Extraction des attributs de chaque segment
+            // Extract attributes of each segment
             long originId = Long.parseLong(segmentElement.getAttribute("origin"));
             long destinationId = Long.parseLong(segmentElement.getAttribute("destination"));
             String name = segmentElement.getAttribute("name");
             double length = Double.parseDouble(segmentElement.getAttribute("length"));
 
-            // Récupération des intersections d'origine et de destination
+            // Retrieve origin and destination intersections
             Intersection origin = intersectionMap.get(originId);
             Intersection destination = intersectionMap.get(destinationId);
 
-            // Création d'un nouveau RoadSegment et mise à jour des listes de successeurs et de prédécesseurs
+            // Create a new RoadSegment and update successor and predecessor lists
             RoadSegment segment = new RoadSegment(origin, destination, name, length);
             origin.getSuccessors().add(segment);
             destination.getPredecessors().add(segment);
@@ -144,32 +134,38 @@ public class CityMap {
     }
 
     /**
-     * Trouve une intersection basée sur sa position.
+     * Finds an intersection based on its position.
      *
-     * @param pos la position de l'intersection à trouver
-     * @return l'intersection correspondante, ou null si elle n'est pas trouvée
+     * @param pos the position of the intersection to find.
+     * @return the corresponding intersection, or null if not found.
      */
     public Intersection findIntersectionByPos(int pos) {
-        // Parcourt toutes les intersections
+        // Iterate through all intersections
         for (Intersection intersection : this.intersections) {
             if (intersection.getPos() == pos) {
-                // Retourne l'intersection si la position correspond
+                // Return the intersection if the position matches
                 return intersection;
             }
         }
-        // Retourne null si aucune intersection correspondante n'est trouvée
+        // Return null if no matching intersection is found
         return null;
     }
 
+    /**
+     * Finds an intersection based on its ID.
+     *
+     * @param id the ID of the intersection to find.
+     * @return the corresponding intersection, or null if not found.
+     */
     public Intersection findIntersectionByID(long id) {
-        // Parcourt toutes les intersections
+        // Iterate through all intersections
         for (Intersection intersection : this.intersections) {
             if (intersection.getId() == id) {
-                // Retourne l'intersection si la position correspond
+                // Return the intersection if the ID matches
                 return intersection;
             }
         }
-        // Retourne null si aucune intersection correspondante n'est trouvée
+        // Return null if no matching intersection is found
         return null;
     }
 
@@ -200,5 +196,5 @@ public class CityMap {
             e.printStackTrace();
         }
     }
-        
+
 }

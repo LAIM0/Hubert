@@ -19,6 +19,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+/**
+ * The NewMapController class is responsible for handling user interactions for loading a new map.
+ */
 public class NewMapController {
 
     @FXML
@@ -29,9 +32,17 @@ public class NewMapController {
 
     private String selectedFilePath;
 
+    /**
+     * Initializes the controller.
+     */
     public void initialize() {
     }
 
+    /**
+     * Handles the event when the "Load File" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     private void handleLoadFile(ActionEvent event) {
 
@@ -42,8 +53,6 @@ public class NewMapController {
         // Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
-
-        //getClass().getResource("/fr/insalyonif/hubert/successSave.fxml")
 
 
         // Show open file dialog
@@ -71,12 +80,17 @@ public class NewMapController {
         }
     }
 
+    /**
+     * Handles the event when the "Start" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an error occurs during the loading of the FXML file.
+     */
     @FXML
     private void handleStart(ActionEvent event) throws IOException {
         // Récupérer la date du DatePicker
-        //start.setVisible(true);
         if (datePicker.getValue()==null || Objects.equals(selectedFilePath, null) || Objects.equals(selectedFilePath, "")){
-            //System.out.println("selectedFilePath = "+selectedFilePath);
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File Loading Failed");
             alert.setHeaderText(null);
