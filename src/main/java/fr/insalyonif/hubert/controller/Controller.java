@@ -135,10 +135,10 @@ public class Controller {
 
     public int deleteDelivery(DeliveryRequest requestToDelete, int id) {
         DeliveryTour deliveryTour= listeDelivery.get(id);
-        System.out.println(requestToDelete);
-        System.out.println(deliveryTour.getDijkstra().getChemins());
+        //System.out.println(requestToDelete);
+        //System.out.println(deliveryTour.getDijkstra().getChemins());
         Intersection interToDelete = requestToDelete.getDeliveryLocation();
-        System.out.println(interToDelete);
+        //System.out.println(interToDelete);
         Iterator<Chemin> cheminIterator = deliveryTour.getDijkstra().getChemins().iterator();
         while (cheminIterator.hasNext()) {
             Chemin chemin = cheminIterator.next();
@@ -486,9 +486,9 @@ public class Controller {
             boolean intersectionExist = false;
             for (DeliveryRequest request : deliveryTour.getRequests()) {
                 if (request.getDeliveryLocation().equals(intersectionPlusProche)) {
-                    System.out.println("equal intersection");
+                    //System.out.println("equal intersection");
                     if(request.getTimeWindow().getEndTime() == deliveryIHM.getTimeWindow().getEndTime()){
-                        System.out.println("equal timewindow");
+                       // System.out.println("equal timewindow");
                         intersectionExist = true;
                         break;
                     }
@@ -499,8 +499,6 @@ public class Controller {
 
                 boolean b1 = deliveryTour.getDijkstra().runDijkstra(intersectionPlusProche, sizeGraph);
                 boolean b2 = deliveryTour.getDijkstraInverse().runDijkstra(intersectionPlusProche, sizeGraph);
-                System.out.println("b1"+b1);
-                System.out.println("b2"+b2);
                 //Si un des deux false alors pop up BOOL1 && BOOL2
                 if (b1 && b2) {
                     deliveryTour.clearCheminsDij();
@@ -515,7 +513,6 @@ public class Controller {
                     deliveryTour.setPaths(bestChemin);
                     MAJDeliveryPointList(idDeliveryTour);
                     DeliveryRequest d =computeDeliveryTime(idDeliveryTour);
-                    System.out.println("delivery a delete "+d);
                     if(d!=null){
                         //deleteDelivery(deli,idDeliveryTour);
 
@@ -530,7 +527,6 @@ public class Controller {
                     return 1; //Error -> Non accessible
                 }
             } else {
-                //System.out.println("L'intersection est déjà présente dans les demandes de livraison.");
                 return 2; //Error -> Point déjà présent
             }
         }
@@ -789,12 +785,10 @@ public class Controller {
             System.out.println("endTimeWindow "+ deliveryRequest.getTimeWindow());
 
             if(instant.isBefore(endTimeWindow)) {
-                System.out.println("CACAAAA2");
                 deliveryRequest.setDeliveryTime(instant);
                 instant = instant.plusSeconds(5 * 60);
                 i++;
             } else if (instant.isAfter(endTimeWindow)){
-                System.out.println("CACAAAA1");
                 deliveryRequest.setDeliveryTime(instant);
                 instant = instant.plusSeconds(5 * 60);
                 i++;
