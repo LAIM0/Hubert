@@ -18,9 +18,12 @@ import javafx.scene.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -184,7 +187,7 @@ public class StartController {
     }
 
     @FXML
-    private void handleLoadFile(ActionEvent event) {
+    private void handleLoadFile(ActionEvent event) throws SAXException, IOException, ParserConfigurationException {
         // Create a FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -193,24 +196,39 @@ public class StartController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        //getClass().getResource("/fr/insalyonif/hubert/successSave.fxml")
-
-
         // Show open file dialog
         Stage stage = (Stage) datePicker.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
 
        // Check if a file is selected
         if (selectedFile != null) {
-            selectedFilePath = selectedFile.getAbsolutePath();
-            System.out.println("Selected File: " + selectedFilePath);
+            // Initialisation du constructeur de documents XML
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            // Parsing du document XML
+            Document doc = dBuilder.parse(selectedFile);
 
-            // Show a success popup
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("File Loaded");
-            alert.setHeaderText(null);
-            alert.setContentText("File loaded successfully: " + selectedFilePath);
-            alert.showAndWait();
+            // Normalisation du document XML pour éliminer les espaces blancs inutiles
+            doc.getDocumentElement().normalize();
+            Element map = (Element) doc.getElementsByTagName("map").item(0);
+            Element deliveryTour = (Element) doc.getElementsByTagName("deliveryTour").item(0);
+
+            
+            if (map == null || deliveryTour != null){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Ce fichier ne correspond pas :(");
+                alert.showAndWait();
+                return;
+            }else{
+                selectedFilePath = selectedFile.getAbsolutePath();
+                System.out.println("Selected File: " + selectedFilePath);
+                // Show a success popup
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("File Loaded");
+                alert.setHeaderText(null);
+                alert.setContentText("File loaded successfully: " + selectedFilePath);
+                alert.showAndWait();
+            }
         } else {
             // Show an error popup if no file is selected
             Alert alert = new Alert(Alert.AlertType.ERROR);
