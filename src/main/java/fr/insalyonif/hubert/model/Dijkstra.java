@@ -1,36 +1,34 @@
 package fr.insalyonif.hubert.model;
-import java.util.*;
+
+import java.util.Collection;
+
 /**
- * Classe pour implémenter l'algorithme de Dijkstra.
+ * Class to implement the Dijkstra's algorithm.
  */
 public class Dijkstra extends AbstractDijkstra {
 
     private final int INFINITY = Integer.MAX_VALUE;
 
     /**
-     * Constructeur de la classe Dijkstra.
+     * Constructor for the Dijkstra class.
      *
-     * @param sizeGraph La taille du graphe.
-     * @param cityMap   La carte de la ville utilisée pour la navigation.
+     * @param sizeGraph The size of the graph.
+     * @param cityMap   The city map used for navigation.
      */
     public Dijkstra(int sizeGraph, CityMap cityMap) {
         super(sizeGraph, cityMap);
-        // Ajoute le point de départ (entrepôt) aux demandes de livraison.
-
-
-
     }
 
     /**
-     * Relâche un nœud dans l'algorithme de relaxation de Dijkstra.
+     * Relaxes a node in the Dijkstra's relaxation algorithm.
      *
-     * @param u      Le nœud source.
-     * @param v      Le nœud de destination.
-     * @param weight Le poids associé à l'arête entre u et v.
+     * @param u      The source node.
+     * @param v      The destination node.
+     * @param weight The weight associated with the edge between u and v.
      */
     @Override
     protected void relax(Intersection u, Intersection v, double weight) {
-        // Met à jour la distance et le prédecesseur si un chemin plus court est trouvé.
+        // Updates the distance and predecessor if a shorter path is found.
         if (distance[u.getPos()] + weight < distance[v.getPos()]) {
             distance[v.getPos()] = distance[u.getPos()] + weight;
             this.pi[v.getPos()] = u.getPos();
@@ -38,11 +36,11 @@ public class Dijkstra extends AbstractDijkstra {
     }
 
     /**
-     * Construit la copie partielle du tableau pi lors de l'ajout d'une demande de livraison.
+     * Builds the partial copy of the pi array when adding a delivery request.
      *
-     * @param piCopy    Tableau partiellement copié.
-     * @param start     L'intersection de départ.
-     * @param delivery  L'intersection de livraison.
+     * @param piCopy    Partially copied array.
+     * @param start     The starting intersection.
+     * @param delivery  The delivery intersection.
      */
     protected void piCopyConstructor(int[] piCopy, Intersection start, Intersection delivery) {
         int j = delivery.getPos();
@@ -53,21 +51,21 @@ public class Dijkstra extends AbstractDijkstra {
     }
 
     /**
-     * Récupère les voisins d'une intersection utilisés dans l'algorithme de Dijkstra.
+     * Gets the neighbors of an intersection used in the Dijkstra's algorithm.
      *
-     * @param intersection L'intersection pour laquelle les voisins sont récupérés.
-     * @return Une collection de segments de route voisins.
+     * @param intersection The intersection for which neighbors are retrieved.
+     * @return A collection of neighboring road segments.
      */
     @Override
-    protected Iterable<RoadSegment> getNeighbors(Intersection intersection) {
+    protected Collection<RoadSegment> getNeighbors(Intersection intersection) {
         return intersection.getSuccessors();
     }
 
     /**
-     * Sélectionne le nœud suivant à explorer pendant l'algorithme de Dijkstra.
+     * Selects the next node to explore during the Dijkstra's algorithm.
      *
-     * @param roadSegment Le segment de route connectant le nœud actuel au nœud suivant.
-     * @return Le nœud de destination du segment de route.
+     * @param roadSegment The road segment connecting the current node to the next node.
+     * @return The destination node of the road segment.
      */
     @Override
     protected Intersection selectNode(RoadSegment roadSegment) {
@@ -75,24 +73,24 @@ public class Dijkstra extends AbstractDijkstra {
     }
 
     /**
-     * Crée un objet Chemin représentant le chemin entre deux intersections.
+     * Creates a Chemin object representing the path between two intersections.
      *
-     * @param start       L'intersection de départ.
-     * @param destination L'intersection de destination.
-     * @param pi          Tableau de prédécesseurs représentant le chemin.
-     * @param cout        Le coût total du chemin.
-     * @return Un objet Chemin représentant le chemin calculé.
+     * @param start       The starting intersection.
+     * @param destination The destination intersection.
+     * @param pi          Array of predecessors representing the path.
+     * @param cost        The total cost of the path.
+     * @return A Chemin object representing the calculated path.
      */
     @Override
-    protected Chemin createChemin(Intersection start, Intersection destination, int[] pi, double cout) {
-        Chemin chemin = new Chemin(start, destination, pi, cout);
+    protected Chemin createChemin(Intersection start, Intersection destination, int[] pi, double cost) {
+        Chemin chemin = new Chemin(start, destination, pi, cost);
         return chemin;
     }
 
     /**
-     * Ajoute une intersection de livraison à la liste des demandes de livraison.
+     * Adds a delivery intersection to the list of delivery requests.
      *
-     * @param deliveryIntersection L'intersection de livraison à ajouter.
+     * @param deliveryIntersection The delivery intersection to add.
      */
     public void addDeliveryRequest(Intersection deliveryIntersection) {
         deliveryRequest.add(deliveryIntersection);

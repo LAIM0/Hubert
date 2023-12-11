@@ -5,8 +5,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Représente une demande de livraison caractérisée par un lieu de livraison et une fenêtre temporelle.
- * Cette classe est utilisée pour gérer les informations relatives à une demande de livraison spécifique.
+ * Represents a delivery request characterized by a delivery location and a time window.
+ * This class is used to manage information related to a specific delivery request.
  */
 public class DeliveryRequest {
     private Intersection deliveryLocation;
@@ -15,19 +15,29 @@ public class DeliveryRequest {
 
     private boolean goOff = false;
 
+    /**
+     * Checks if there is a slight delay for this delivery request.
+     *
+     * @return true if there is a slight delay, false otherwise.
+     */
     public boolean isGoOff() {
         return goOff;
     }
 
+    /**
+     * Sets whether there is a slight delay for this delivery request.
+     *
+     * @param goOff true if there is a slight delay, false otherwise.
+     */
     public void setGoOff(boolean goOff) {
         this.goOff = goOff;
     }
 
     /**
-     * Constructeur pour créer une nouvelle demande de livraison.
+     * Constructor to create a new delivery request.
      *
-     * @param deliveryLocation l'intersection représentant le lieu de livraison.
-     * @param timeWindow la fenêtre temporelle pendant laquelle la livraison doit être effectuée.
+     * @param deliveryLocation The intersection representing the delivery location.
+     * @param timeWindow       The time window during which the delivery should be made.
      */
     public DeliveryRequest(Intersection deliveryLocation, TimeWindow timeWindow) {
         this.deliveryLocation = deliveryLocation;
@@ -35,90 +45,87 @@ public class DeliveryRequest {
     }
 
     /**
-     * Constructeur pour créer une nouvelle demande de livraison sans timeWindow.
+     * Constructor to create a new delivery request without a time window.
      *
-     * @param deliveryLocation l'intersection représentant le lieu de livraison.
+     * @param deliveryLocation The intersection representing the delivery location.
      */
     public DeliveryRequest(Intersection deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
-        this.timeWindow = new TimeWindow(0,0);
+        this.timeWindow = new TimeWindow(0, 0);
     }
 
     /**
-     * Retourne le lieu de livraison de la demande.
+     * Gets the delivery location of the request.
      *
-     * @return l'intersection représentant le lieu de livraison.
+     * @return The intersection representing the delivery location.
      */
     public Intersection getDeliveryLocation() {
         return deliveryLocation;
     }
 
     /**
-     * Définit le lieu de livraison de la demande.
+     * Sets the delivery location of the request.
      *
-     * @param deliveryLocation l'intersection représentant le nouveau lieu de livraison.
+     * @param deliveryLocation The new delivery location.
      */
     public void setDeliveryLocation(Intersection deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
     }
 
     /**
-     * Retourne la fenêtre temporelle associée à la demande de livraison.
+     * Gets the time window associated with the delivery request.
      *
-     * @return la fenêtre temporelle.
+     * @return The time window.
      */
     public TimeWindow getTimeWindow() {
         return timeWindow;
     }
 
     /**
-     * Définit la fenêtre temporelle associée à la demande de livraison.
+     * Sets the time window associated with the delivery request.
      *
-     * @param timeWindow la nouvelle fenêtre temporelle.
+     * @param timeWindow The new time window.
      */
     public void setTimeWindow(TimeWindow timeWindow) {
         this.timeWindow = timeWindow;
     }
 
     /**
-     * Retourne l'heure de livraison.
+     * Gets the delivery time.
      *
-     *
+     * @return The delivery time.
      */
     public Instant getDeliveryTime() {
         return this.deliveryTime;
     }
 
     /**
-     * Définit l'heure de livraison.
+     * Sets the delivery time.
      *
-     *
-     * @param time la nouvelle fenêtre temporelle.
+     * @param time The new delivery time.
      */
     public void setDeliveryTime(Instant time) {
         this.deliveryTime = time;
     }
 
-
     /**
-     * Retourne une représentation en chaîne de caractères de la demande de livraison.
+     * Gets a string representation of the delivery request.
      *
-     * @return la représentation textuelle de la demande de livraison.
+     * @return The textual representation of the delivery request.
      */
     @Override
     public String toString() {
-        String deliveryTimeString = deliveryTime != null ? DateTimeFormatter.ofPattern("HH:mm").format(deliveryTime.atZone(ZoneId.of("UTC"))) : "Non spécifié";
-        String timeWindowString = timeWindow != null ? timeWindow.toString() : "Non spécifié";
-        if(goOff==false){
+        String deliveryTimeString = deliveryTime != null ? DateTimeFormatter.ofPattern("HH:mm").format(deliveryTime.atZone(ZoneId.of("UTC"))) : "Not specified";
+        String timeWindowString = timeWindow != null ? timeWindow.toString() : "Not specified";
+        if (goOff == false) {
             return "Delivery at intersection: " + deliveryLocation.getId() +
-                    "\nScheduled for: " + deliveryTimeString+
-                    "\n"+timeWindowString;
-        }else{
+                    "\nScheduled for: " + deliveryTimeString +
+                    "\n" + timeWindowString;
+        } else {
             return "Delivery at intersection: " + deliveryLocation.getId() +
-                    "\nScheduled for: " + deliveryTimeString+
-                    "\n"+timeWindowString+
-                    "\nWARNING : Slight delay!";
+                    "\nScheduled for: " + deliveryTimeString +
+                    "\n" + timeWindowString +
+                    "\nWARNING: Slight delay!";
         }
-
     }
 }

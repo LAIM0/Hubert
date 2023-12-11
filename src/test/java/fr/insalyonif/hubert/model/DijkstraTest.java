@@ -40,19 +40,6 @@ class DijkstraTest {
         dijkstra.deliveryRequest.add(inter3);
     }
 
-    @Test
-    void testCalculateEuclideanDistance() {
-        double expected = 0.0066512870002723165;
-        double result = dijkstra.calculateEuclideanDistance(inter1,inter2);
-        assertEquals(expected,result,"Le resultat du calcul de la distance n'est pas celui attendu");
-    }
-
-    @Test
-    void testHeuristic() {
-        double expected = dijkstra.calculateEuclideanDistance(inter1, inter2);
-        double result = dijkstra.heuristic(inter1, inter2);
-        assertEquals(expected, result, "La valeur heuristique doit correspondre à la distance euclidienne");
-    }
 
     @Test
     void testHasGrayNode() {

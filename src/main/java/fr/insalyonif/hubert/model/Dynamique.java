@@ -2,77 +2,88 @@ package fr.insalyonif.hubert.model;
 
 import java.util.List;
 
+/**
+ * Interface representing a dynamic programming algorithm for solving a routing problem.
+ */
 public interface Dynamique {
     /**
-     * Crée un ensemble contenant tous les entiers de 1 à n-1
-     * @param n la limite supérieure de l'ensemble
-     * @return l'ensemble créé
+     * Creates a set containing all integers from 1 to n-1.
+     *
+     * @param n The upper limit of the set.
+     * @return The created set.
      */
     public int createSet(int n);
 
     /**
-     * Affiche tous les éléments de l'ensemble donné
-     * @param s l'ensemble à afficher
+     * Displays all elements of the given set.
+     *
+     * @param s The set to display.
      */
     public void printSet(int s);
 
     /**
-     * Obtient un objet Chemin à partir d'une liste de chemins basée sur les positions de début et de fin fournies
-     * @param chemins la liste de chemins
-     * @param debut la position de départ
-     * @param fin la position de fin
-     * @return L'objet Chemin correspondant aux positions de début et de fin, ou null s'il n'est pas trouvé
+     * Gets a Chemin object from a list of paths based on the provided start and end positions.
+     *
+     * @param chemins The list of paths.
+     * @param debut   The starting position.
+     * @param fin     The ending position.
+     * @return The Chemin object corresponding to the start and end positions, or null if not found.
      */
     public Chemin getCheminBy(List<Chemin> chemins, int debut, int fin);
 
     /**
-     * Trouve le meilleur chemin dans une liste de chemins basé sur une solution donnée
-     * @param chemins la liste de chemins
-     * @param g le graphe
-     * @param bestSol la meilleure solution
-     * @return La liste de chemins représentant le meilleur chemin
+     * Finds the best path in a list of paths based on a given solution.
+     *
+     * @param chemins The list of paths.
+     * @param g       The graph.
+     * @param bestSol The best solution.
+     * @return The list of paths representing the best path.
      */
     public List<Chemin> bestCheminGlobal(List<Chemin> chemins, Graph g, List<Integer> bestSol);
 
     /**
-     * Trouve le chemin optimal en utilisant la programmation dynamique classique
-     * @param start la position de départ
-     * @param n la limite supérieure de l'ensemble
-     * @param g le graphe
-     * @param mem la matrice de mémorisation
-     * @return Le chemin optimal sous forme de liste d'entiers
+     * Finds the optimal path using classic dynamic programming.
+     *
+     * @param start The starting position.
+     * @param n     The upper limit of the set.
+     * @param g     The graph.
+     * @param mem   The memoization matrix.
+     * @return The optimal path as a list of integers.
      */
     public List<Integer> classicPath(int start, int n, Graph g, double[][] mem);
 
     /**
-     * Fonction récursive pour la programmation dynamique classique
-     * @param i la position actuelle
-     * @param s l'ensemble actuel des positions restantes
-     * @param n la limite supérieure de l'ensemble
-     * @param g le graphe
-     * @param mem la matrice de mémorisation
-     * @return Le coût minimum pour les paramètres donnés
+     * Recursive function for classic dynamic programming.
+     *
+     * @param i   The current position.
+     * @param s   The current set of remaining positions.
+     * @param n   The upper limit of the set.
+     * @param g   The graph.
+     * @param mem The memoization matrix.
+     * @return The minimum cost for the given parameters.
      */
     public double classicDynamic(int i, int s, int n, Graph g, double[][] mem);
 
     /**
-     * Trouve le chemin optimal en utilisant la programmation dynamique adaptative
-     * @param start la position de départ
-     * @param n la limite supérieure de l'ensemble
-     * @param g le graphe
-     * @param mem la matrice de mémorisation
-     * @return Le chemin optimal sous forme de liste d'entiers
+     * Finds the optimal path using adaptive dynamic programming.
+     *
+     * @param start The starting position.
+     * @param n     The upper limit of the set.
+     * @param g     The graph.
+     * @param mem   The memoization matrix.
+     * @return The optimal path as a list of integers.
      */
     public List<Integer> adaptivePath(int start, int n, Graph g, double[][] mem);
 
     /**
-     * Fonction récursive pour la programmation dynamique adaptative
-     * @param debut la position de départ
-     * @param s l'ensemble actuel des positions restantes
-     * @param n la limite supérieure de l'ensemble
-     * @param g le graphe
-     * @param mem la matrice de mémorisation
-     * @return Le coût minimum pour les paramètres donnés
+     * Recursive function for adaptive dynamic programming.
+     *
+     * @param debut The starting position.
+     * @param s     The current set of remaining positions.
+     * @param n     The upper limit of the set.
+     * @param g     The graph.
+     * @param mem   The memoization matrix.
+     * @return The minimum cost for the given parameters.
      */
     public double adaptiveDynamic(int debut, int s, int n, Graph g, double[][] mem);
 }

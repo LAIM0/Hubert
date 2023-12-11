@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Classe abstraite pour implémenter l'algorithme de Dijkstra.
+ * Abstract class to implement the Dijkstra algorithm.
  */
 public abstract class AbstractDijkstra {
     private final int INFINITY = Integer.MAX_VALUE;
@@ -16,17 +16,17 @@ public abstract class AbstractDijkstra {
 
     public String[] colors;
 
-    private ArrayList<Chemin> chemins ;
+    private ArrayList<Chemin> chemins;
 
-    public ArrayList<Intersection> deliveryRequest ;
+    public ArrayList<Intersection> deliveryRequest;
 
     protected CityMap cityMap;
 
     /**
-     * Constructeur de la classe AbstractDijkstra.
+     * Constructor for the AbstractDijkstra class.
      *
-     * @param sizeGraph La taille du graphe.
-     * @param cityMap   La carte de la ville.
+     * @param sizeGraph The size of the graph.
+     * @param cityMap   The city map.
      */
     public AbstractDijkstra(int sizeGraph, CityMap cityMap) {
         this.distance = new double[sizeGraph];
@@ -36,10 +36,6 @@ public abstract class AbstractDijkstra {
         this.chemins = new ArrayList<Chemin>();
         deliveryRequest = new ArrayList<Intersection>();
         deliveryRequest.add(cityMap.getWareHouseLocation());
-
-
-
-
 
         colors = new String[sizeGraph];
         Arrays.fill(colors, "white");
@@ -74,9 +70,9 @@ public abstract class AbstractDijkstra {
     }
 
     /**
-     * Vérifie s'il y a un nœud gris dans le graphe.
+     * Checks if there is a gray node in the graph.
      *
-     * @return true s'il y a un nœud gris, sinon false.
+     * @return true if there is a gray node, otherwise false.
      */
     protected boolean hasGrayNode() {
         for (String color : colors) {
@@ -88,9 +84,9 @@ public abstract class AbstractDijkstra {
     }
 
     /**
-     * Trouve le nœud gris avec la plus petite distance dans le graphe.
+     * Finds the gray node with the smallest distance in the graph.
      *
-     * @return L'intersection correspondant au nœud gris avec la plus petite distance.
+     * @return The intersection corresponding to the gray node with the smallest distance.
      */
     protected Intersection minGrayNode() {
         double min = INFINITY;
@@ -107,17 +103,16 @@ public abstract class AbstractDijkstra {
     }
 
     /**
-     * Exécute l'algorithme de Dijkstra pour trouver les chemins les plus courts.
+     * Executes the Dijkstra algorithm to find the shortest paths.
      *
-     * @param start     L'intersection de départ.
-     * @param sizeGraph La taille du graphe.
-     * @return true si le point de départ peut atteindre tous les points de livraison, sinon false.
+     * @param start     The starting intersection.
+     * @param sizeGraph The size of the graph.
+     * @return true if the starting point can reach all delivery points, otherwise false.
      */
     public boolean runDijkstra(Intersection start, int sizeGraph) {
         if (!deliveryRequest.contains(start)) {
             deliveryRequest.add(start);
         }
-        System.out.println("caca" + deliveryRequest);
 
         for (int i = 0; i < sizeGraph; i++) {
             distance[i] = INFINITY;
@@ -173,33 +168,35 @@ public abstract class AbstractDijkstra {
     }
 
     protected abstract Iterable<RoadSegment> getNeighbors(Intersection intersection);
+
     protected abstract Intersection selectNode(RoadSegment roadSegment);
+
     protected abstract Chemin createChemin(Intersection start, Intersection destination, int[] pi, double cout);
+
     protected abstract void relax(Intersection u, Intersection v, double weight);
 
     /**
-     * Copie les prédécesseurs du chemin pour une demande de livraison spécifique.
+     * Copies the predecessors of the path for a specific delivery request.
      *
-     * @param piCopy    Tableau de prédécesseurs à copier.
-     * @param start     Intersection de départ.
-     * @param delivery  Intersection de destination (demande de livraison).
+     * @param piCopy    The array of predecessors to copy.
+     * @param start     The starting intersection.
+     * @param delivery  The destination intersection (delivery request).
      */
     protected abstract void piCopyConstructor(int[] piCopy, Intersection start, Intersection delivery);
 
     /**
-     * Retourne la liste des chemins calculés par l'algorithme de Dijkstra.
+     * Returns the list of paths calculated by the Dijkstra algorithm.
      *
-     * @return Une liste de chemins.
+     * @return A list of paths.
      */
     public ArrayList<Chemin> getChemins() {
         return chemins;
     }
 
-
     /**
-     * Retourne la liste des intersections faisant l'objet de demandes de livraison.
+     * Returns the list of intersections that are the subject of delivery requests.
      *
-     * @return Une liste d'intersections représentant les demandes de livraison.
+     * @return A list of intersections representing delivery requests.
      */
     public List<Intersection> getDeliveryRequest() {
         return deliveryRequest;
