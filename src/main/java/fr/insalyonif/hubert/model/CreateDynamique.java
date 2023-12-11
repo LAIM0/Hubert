@@ -161,7 +161,7 @@ public class CreateDynamique implements Dynamique {
                 double futureCost = round((adaptiveDynamic(j, removeElement(s, j), n, g, mem)) * 1e7) / 1e7;
                 if (abs(remainingCost - futureCost) < 0.000000001) {
                     path.add(0, i);
-                    classicCreatePath(j, removeElement(s, j), n, g, mem, path);
+                    adaptiveCreatePath(j, removeElement(s, j), n, g, mem, path);
                     break;
                 }
             }
@@ -174,14 +174,14 @@ public class CreateDynamique implements Dynamique {
         }
 
         if (isEmpty(s)) {
-            mem[debut][n+1] = g.getCost(debut, n+1);
-            return g.getCost(debut, n+1);
+            mem[debut][n] = g.getCost(debut, n);
+            return g.getCost(debut, n);
         }
 
         double min = Double.MAX_VALUE;
-        for (int j = 1; j < n - 1; j++) {
+        for (int j = 1; j < n ; j++) {
             if (isIn(j, s)) {
-                double d = classicDynamic(j, removeElement(s, j), n, g, mem);
+                double d = adaptiveDynamic(j, removeElement(s, j), n, g, mem);
                 if (g.getCost(debut, j) + d < min) min = g.getCost(debut, j) + d;
             }
         }

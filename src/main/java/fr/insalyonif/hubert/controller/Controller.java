@@ -1,6 +1,7 @@
 package fr.insalyonif.hubert.controller;
 import fr.insalyonif.hubert.views.DeliveryIHMController;
 
+import java.awt.dnd.DropTarget;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -245,11 +246,19 @@ public class Controller {
             }
             if (requests8.size() == 1) {
                 optimalPath.add(pos8.get(0));
+                if (nextrequests != null) {
+                    for (int request = 0; request < nextrequests.size(); request++) {
+                        rTemp.add(nextrequests.get(request));
+                        System.out.println(rTemp);
+                        rTemp.remove(rTemp.size() - 1);
+                    }
+                }
             } else {
                 if (nextrequests != null) {
                     for (int request = 0; request < nextrequests.size(); request++) {
                         //                    rTemp.remove(0);
                         rTemp.add(nextrequests.get(request));
+                        System.out.println(rTemp);
                         Graph g8 = new CompleteGraph(deliveryTour.getCheminDij(), rTemp, cityMap);
                         CreateDynamique dynamique8 = new CreateDynamique(g8);
                         int n = g8.getNbVertices() - 1;
@@ -260,10 +269,12 @@ public class Controller {
                             Arrays.fill(memD[i], 0);
                         }
                         System.out.println(n);
+                        System.out.println(dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD));
                         if (dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD) < d8) {
                             d8 = dynamique8.adaptiveDynamic(nextStart, s, n, g8, memD);
                             optimalPath8 = dynamique8.adaptivePath(nextStart, n, g8, memD);
-                            optimalPath8.remove(optimalPath8.size() - 1);
+                            System.out.printf("Optimal Hamiltonian Circuit Path8: %s\n", optimalPath8);
+//                            optimalPath8.remove(optimalPath8.size() - 1);
                             nextStart = request;
                         }
                     }
@@ -334,7 +345,7 @@ public class Controller {
                         if (dynamique9.adaptiveDynamic(nextStart, s, n, g9, memD) < d9) {
                             d9 = dynamique9.adaptiveDynamic(nextStart, s, n, g9, memD);
                             optimalPath9 = dynamique9.adaptivePath(nextStart, n, g9, memD);
-                            optimalPath9.remove(optimalPath9.size() - 1);
+//                            optimalPath9.remove(optimalPath9.size() - 1);
                             nextStart = request;
                         }
                     }
@@ -400,7 +411,7 @@ public class Controller {
                         if (dynamique10.adaptiveDynamic(nextStart, s, n, g10, memD) < d10) {
                             d10 = dynamique10.adaptiveDynamic(nextStart, s, n, g10, memD);
                             optimalPath10 = dynamique10.adaptivePath(nextStart, n, g10, memD);
-                            optimalPath10.remove(optimalPath10.size() - 1);
+//                            optimalPath10.remove(optimalPath10.size() - 1);
                             nextStart = request;
                         }
                     }
@@ -436,6 +447,7 @@ public class Controller {
             double d11 = Double.MAX_VALUE;
             rTemp.clear();
             rTemp.addAll(requests11);
+            System.out.println(rTemp);
 
 
             Graph g11 = new CompleteGraph(deliveryTour.getCheminDij(), rTemp, cityMap);
