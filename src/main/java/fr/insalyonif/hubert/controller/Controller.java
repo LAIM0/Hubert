@@ -246,22 +246,22 @@ public class Controller {
             }
             if (requests8.size() == 1) {
                 optimalPath.add(pos8.get(0));
-                if (nextrequests != null) {
-                    for (int request = 0; request < nextrequests.size(); request++) {
-                        rTemp.add(nextrequests.get(request));
-                        System.out.println(rTemp);
-                        rTemp.remove(rTemp.size() - 1);
-                    }
-                }
+//                if (nextrequests != null) {
+//                    for (int request = 0; request < nextrequests.size(); request++) {
+//                        rTemp.add(nextrequests.get(request));
+//                        System.out.println(rTemp);
+//                        rTemp.remove(rTemp.size() - 1);
+//                    }
+//                }
             } else {
                 if (nextrequests != null) {
                     for (int request = 0; request < nextrequests.size(); request++) {
-                        //                    rTemp.remove(0);
+                        rTemp.remove(0);
                         rTemp.add(nextrequests.get(request));
                         System.out.println(rTemp);
                         Graph g8 = new CompleteGraph(deliveryTour.getCheminDij(), rTemp, cityMap);
                         CreateDynamique dynamique8 = new CreateDynamique(g8);
-                        int n = g8.getNbVertices() - 1;
+                        int n = g8.getNbVertices();
                         int s = dynamique8.createSet(n); // s contains all integer values ranging between 1 and n
 
                         double[][] memD = new double[n][s + 1];
@@ -459,6 +459,7 @@ public class Controller {
             for (int i = 0; i < n; i++) {
                 Arrays.fill(memD[i], 0);
             }
+            System.out.println(nextStart);
             d11 = dynamique11.classicDynamic(nextStart, s, n, g11, memD);
             optimalPath11 = dynamique11.classicPath(nextStart, n, g11, memD);
 

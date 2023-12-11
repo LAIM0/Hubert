@@ -174,8 +174,8 @@ public class CreateDynamique implements Dynamique {
         }
 
         if (isEmpty(s)) {
-            mem[debut][n] = g.getCost(debut, n);
-            return g.getCost(debut, n);
+            mem[debut][n] = g.getCost(debut, n + 1);
+            return g.getCost(debut, n + 1);
         }
 
         double min = Double.MAX_VALUE;
