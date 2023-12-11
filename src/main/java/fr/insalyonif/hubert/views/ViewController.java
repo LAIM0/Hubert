@@ -1,4 +1,5 @@
 package fr.insalyonif.hubert.views;
+
 import fr.insalyonif.hubert.controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,13 +22,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Random;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeoutException;
 
 import netscape.javascript.JSObject;
 
@@ -41,7 +38,22 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-
+/**
+ * The ViewController class is responsible for managing the graphical user interface (GUI) of the delivery planning application.
+ * It handles interactions between the user interface components, the underlying data model, and the displayed map.
+ *
+ * This class utilizes JavaFX for building the GUI and incorporates a WebView for rendering an interactive map using Leaflet.
+ * It includes various methods for handling user actions, such as adding new couriers, deleting delivery requests,
+ * opening new windows for adding deliveries, importing map files, and saving the current map state.
+ *
+ * The WebView displays a map with markers representing the warehouse, delivery locations, and delivery routes.
+ * It uses JavaScript to interact with the Java code, enabling communication between the map and the application logic.
+ * Additionally, the class supports importing and displaying delivery data from XML files.
+ *
+ * The ViewController class also contains methods for updating the displayed map, handling courier and delivery selection,
+ * and setting up the initial state of the GUI. It is part of a larger application architecture that includes the Controller
+ * class for managing the underlying data and logic.
+ */
 public class ViewController implements Initializable {
     @FXML
     private WebView webView;
@@ -143,10 +155,12 @@ public class ViewController implements Initializable {
             </html>
             """;
 
-    public WebEngine getEngine() {
-        return engine;
-    }
 
+    /**
+     * Handles the event when the "Add New Courier" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     void addNewCourrier(ActionEvent event) {
         if (controller != null) {
@@ -162,6 +176,12 @@ public class ViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the deletion of a delivery request.
+     *
+     * @param selectedDelivery The selected delivery request to be deleted.
+     * @param id The ID of the courier associated with the delivery request.
+     */
     public void handleDeleteDelivery(DeliveryRequest selectedDelivery, int id) {
         if (controller != null) {
             int traceDeletePoint = controller.deleteDelivery(selectedDelivery,id);
@@ -174,21 +194,21 @@ public class ViewController implements Initializable {
         }
     }
 
-
-
-
-
+    /**
+     * Handles the event when the "Open New Window" button is clicked, either from the "Delivery" or "Validate Delivery" buttons.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     void handleOpenNewWindow(ActionEvent event) {
-        if(event.getSource()==delivery || event.getSource()==validate_delivery) {
-            if(controller !=null) {
+        if (event.getSource() == delivery || event.getSource() == validate_delivery) {
+            if (controller != null) {
                 try {
-                    // Charger le fichier FXML de la nouvelle fenêtre
+                    // Load the FXML file for the new window
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/insalyonif/hubert/addDelivery.fxml"));
                     Parent root = (Parent) loader.load();
 
-
-                    // Créer une nouvelle fenêtre
+                    // Create a new stage for the new window
                     Stage newStage = new Stage();
                     newStage.setTitle("add Delivery");
                     newStage.setScene(new Scene(root));
@@ -197,42 +217,42 @@ public class ViewController implements Initializable {
                     deliveryIHM.setInitialCourier((Courier) objects[0]);
                     deliveryIHM.setInitialTimeWindow((TimeWindow) objects[1]);
 
-                    if(event.getSource()==validate_delivery){
+                    if (event.getSource() == validate_delivery) {
                         deliveryIHM.setLat(lastClickedLat);
                         deliveryIHM.setLng(lastClickedLng);
                         Courier defaultCourier = (Courier) controller.findBestCourier()[0];
-                        TimeWindow defaultTimeWindow =(TimeWindow) controller.findBestCourier()[1];
+                        TimeWindow defaultTimeWindow = (TimeWindow) controller.findBestCourier()[1];
 
                         courier.setValue(defaultCourier);
-
                     }
                     deliveryIHM.setListCourier(listCourier);
 
-
-                    // Afficher la nouvelle fenêtre
+                    // Show the new window
                     newStage.showAndWait();
 
                     if (deliveryIHM.isValiderClicked()) {
-                        int traceNewDeliveryPoint = controller.newDeliveryPoint(deliveryIHM,deliveryIHM.getCourier().getId());
-                        if(traceNewDeliveryPoint == 0){
+                        int traceNewDeliveryPoint = controller.newDeliveryPoint(deliveryIHM, deliveryIHM.getCourier().getId());
+                        if (traceNewDeliveryPoint == 0) {
                             String markersJs = drawPaths(controller.getCityMap(), null);
                             String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
                             engine.loadContent(mapHtml);
                             courier.setValue(deliveryIHM.getCourier());
                             this.setDeliveryRequestIHM(controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests());
-                        } else if(traceNewDeliveryPoint == 1){
+                        } else if (traceNewDeliveryPoint == 1) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setContentText("Point non accessible");
                             alert.showAndWait();
-                        } else if(traceNewDeliveryPoint == 2){
+                        } else if (traceNewDeliveryPoint == 2) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setContentText("Point déjà présent dans la liste");
                             alert.showAndWait();
-                        }else if(traceNewDeliveryPoint == 3){
-                            for (DeliveryRequest d :controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests()){
-                                if(d.isGoOff() && deliveryIHM.getTimeWindow().getStartTime()==d.getTimeWindow().getStartTime() ){
+                        } else if (traceNewDeliveryPoint == 3) {
+                            for (DeliveryRequest d : controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests()) {
+                                if (d.isGoOff() && deliveryIHM.getTimeWindow().getStartTime() == d.getTimeWindow().getStartTime()) {
                                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                                    alert.setContentText("The courier "+deliveryIHM.getCourier().getId()+" will be late for the time window "+d.getTimeWindow().getStartTime()+"h to "+d.getTimeWindow().getEndTime()+"h");
+                                    alert.setContentText("The courier " + deliveryIHM.getCourier().getId() +
+                                            " will be late for the time window " +
+                                            d.getTimeWindow().getStartTime() + "h to " + d.getTimeWindow().getEndTime() + "h");
                                     alert.showAndWait();
                                     break;
                                 }
@@ -242,70 +262,75 @@ public class ViewController implements Initializable {
                             engine.loadContent(mapHtml);
                             courier.setValue(deliveryIHM.getCourier());
                             this.setDeliveryRequestIHM(controller.getListeDelivery().get(deliveryIHM.getCourier().getId()).getRequests());
-
                         }
                     }
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Il faut d'abord choisir une MAP");
                 alert.showAndWait();
             }
-
-
-
-
         }
     }
 
-
+    /**
+     * Imports all deliveries from an XML file into the controller.
+     *
+     * @param pathname The pathname of the XML file containing the deliveries.
+     * @throws Exception If an error occurs during the file import process.
+     */
     public void importAllTheDeliveriesIntoController(String pathname) throws Exception {
         controller.loadArchiveFile(pathname);
     }
 
-
-
-    // Méthode pour calculer la distance entre deux points géographiques en utilisant la formule de Haversine
-
+    /**
+     * Display the delivery points on the map, including the warehouse and individual delivery locations.
+     *
+     * @param target The specific delivery request to highlight (can be null).
+     * @return A StringBuilder containing JavaScript code for displaying markers on the map.
+     */
     private StringBuilder displayDeliveryPoints(DeliveryRequest target) {
-        Courier courrierComboBox =courier.getValue();
+        Courier courierComboBox = courier.getValue();
         StringBuilder markersJs = new StringBuilder();
-        String iconUrl   = "https://cdn-icons-png.flaticon.com/512/124/124434.png";
-        //https://api.iconify.design/mdi/map-marker.svg?color=%23ffae42
+        String iconUrl = "https://cdn-icons-png.flaticon.com/512/124/124434.png";
+
         String markerJs = String.format(
-                "var marker = L.marker([" + controller.getCityMap().getWareHouseLocation().getLatitude() + ", " +  controller.getCityMap().getWareHouseLocation().getLongitude() + "], {icon: L.icon({iconUrl: '%s', iconSize: [25, 35], iconAnchor: [15, 30]})}).addTo(map);"
-                        + "marker.bindTooltip('%s',{permanent:false}).openTooltip();", iconUrl, "Warehouse"
+                "var marker = L.marker([" + controller.getCityMap().getWareHouseLocation().getLatitude() + ", " +
+                        controller.getCityMap().getWareHouseLocation().getLongitude() +
+                        "], {icon: L.icon({iconUrl: '%s', iconSize: [25, 35], iconAnchor: [15, 30]})}).addTo(map);" +
+                        "marker.bindTooltip('%s',{permanent:false}).openTooltip();", iconUrl, "Warehouse"
         );
         markersJs.append(markerJs);
 
-        for( DeliveryTour deliveryTour : controller.getListeDelivery()) {
-            int i=0;
+        for (DeliveryTour deliveryTour : controller.getListeDelivery()) {
+            int i = 0;
             for (DeliveryRequest deliveryRequest : deliveryTour.getRequests()) {
-
                 markersJs.append(markerJs);
+
                 if (target != null && deliveryRequest.getDeliveryLocation().getId() == target.getDeliveryLocation().getId()) {
                     iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
                     i++;
                     markerJs = String.format(
-                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);"
-                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                            //deliveryRequest.getDeliveryLocation().getId()
+                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " +
+                                    deliveryRequest.getDeliveryLocation().getLongitude() +
+                                    "],  {icon: L.icon({iconUrl: '%s', iconSize: [30, 40], iconAnchor: [15, 40]})}).addTo(map);" +
+                                    "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
                             iconUrl, i
                     );
                 } else {
                     iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/1200px-Map_pin_icon.svg.png";
                     i++;
                     markerJs = String.format(
-                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " + deliveryRequest.getDeliveryLocation().getLongitude() + "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);"
-                                    + "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
-                            //deliveryRequest.getDeliveryLocation().getId()
+                            "var marker = L.marker([" + deliveryRequest.getDeliveryLocation().getLatitude() + ", " +
+                                    deliveryRequest.getDeliveryLocation().getLongitude() +
+                                    "],  {icon: L.icon({iconUrl: '%s', iconSize: [15, 20], iconAnchor: [8, 20]})}).addTo(map);" +
+                                    "marker.bindTooltip('Nb: %d',{permanent:false}).openTooltip();",
                             iconUrl, i
                     );
                 }
-
 
                 markersJs.append(markerJs);
             }
@@ -313,51 +338,54 @@ public class ViewController implements Initializable {
         return markersJs;
     }
 
-
-    private String drawPaths(CityMap cityMap,DeliveryRequest deliveryRequest) {
-        Courier courrierComboBox =courier.getValue();
-        if(courrierComboBox==null){
-            courrierComboBox = controller.getListeDelivery().get(0).getCourier();
+    /**
+     * Draw the paths on the map for each delivery tour, highlighting the specified delivery request.
+     *
+     * @param cityMap         The city map.
+     * @param deliveryRequest The specific delivery request to highlight (can be null).
+     * @return JavaScript code for drawing paths on the map.
+     */
+    private String drawPaths(CityMap cityMap, DeliveryRequest deliveryRequest) {
+        Courier courierComboBox = courier.getValue();
+        if (courierComboBox == null) {
+            courierComboBox = controller.getListeDelivery().get(0).getCourier();
         }
         StringBuilder markersJs = displayDeliveryPoints(deliveryRequest);
-        String polylineJsCouleur="";
-        int index=0;
-        for(DeliveryTour deliveryTour : controller.getListeDelivery()) {
+        String polylineJsCouleur = "";
+        int index = 0;
+        for (DeliveryTour deliveryTour : controller.getListeDelivery()) {
             index++;
-            if(deliveryTour.getPaths()!=null) {
+            if (deliveryTour.getPaths() != null) {
                 for (int i = deliveryTour.getPaths().size() - 1; i >= 0; i--) {
                     Chemin chemin = deliveryTour.getPaths().get(i);
-                    // Begin with the end intersection
                     int currentIndex = chemin.getFin().getPos();
                     int nextIndex = chemin.getPi()[currentIndex];
 
                     StringBuilder polylineCoords = new StringBuilder("[");
-                    polylineCoords.append("[").append(chemin.getFin().getLatitude()).append(", ").append(chemin.getFin().getLongitude()).append("],");
+                    polylineCoords.append("[").append(chemin.getFin().getLatitude()).append(", ").
+                            append(chemin.getFin().getLongitude()).append("],");
 
-                    System.out.println("fin" + chemin.getFin());
-                    // Loop through pi array
                     while (nextIndex != -1) {
                         Intersection currentIntersection = cityMap.findIntersectionByPos(nextIndex);
-                        System.out.println(currentIntersection);
                         if (currentIntersection != null) {
-                            polylineCoords.append("[").append(currentIntersection.getLatitude()).append(", ").append(currentIntersection.getLongitude()).append("],");
+                            polylineCoords.append("[").append(currentIntersection.getLatitude()).append(", ").
+                                    append(currentIntersection.getLongitude()).append("],");
                         }
                         currentIndex = nextIndex;
                         nextIndex = chemin.getPi()[currentIndex];
                     }
-                    System.out.println("debut" + chemin.getDebut());
-                    // End with the start intersection
-                    polylineCoords.append("[").append(chemin.getDebut().getLatitude()).append(", ").append(chemin.getDebut().getLongitude()).append("]");
+
+                    polylineCoords.append("[").append(chemin.getDebut().getLatitude()).append(", ").
+                            append(chemin.getDebut().getLongitude()).append("]");
                     polylineCoords.append("]");
 
-
-
-                    if (deliveryTour.getCourier().getId() == courrierComboBox.getId()) {
-                        if (deliveryRequest !=null && chemin.getFin() == deliveryRequest.getDeliveryLocation()) {
-                            System.out.println("caca");
-                            polylineJsCouleur = polylineJsCouleur+ "L.polyline(" + polylineCoords + ", {weight: 6, color: '" + generateColor(index,i,deliveryTour.getPaths().size() - 1) + "'}).addTo(map);";
-                        }else{
-                            polylineJsCouleur = polylineJsCouleur+ "L.polyline(" + polylineCoords + ", {color: '" + generateColor(index,i,deliveryTour.getPaths().size() - 1) + "'}).addTo(map);";
+                    if (deliveryTour.getCourier().getId() == courierComboBox.getId()) {
+                        if (deliveryRequest != null && chemin.getFin() == deliveryRequest.getDeliveryLocation()) {
+                            polylineJsCouleur = polylineJsCouleur + "L.polyline(" + polylineCoords +
+                                    ", {weight: 6, color: '" + generateColor(index, i, deliveryTour.getPaths().size() - 1) + "'}).addTo(map);";
+                        } else {
+                            polylineJsCouleur = polylineJsCouleur + "L.polyline(" + polylineCoords +
+                                    ", {color: '" + generateColor(index, i, deliveryTour.getPaths().size() - 1) + "'}).addTo(map);";
                         }
                     } else {
                         String polylineJs = "L.polyline(" + polylineCoords + ", {color: 'grey'}).addTo(map);";
@@ -370,17 +398,39 @@ public class ViewController implements Initializable {
         return markersJs.toString();
     }
 
-    public static String generateColor(int i, int j,int maxJ) {
+    /**
+     * Generate a color for the polyline based on the given index and its position in the path.
+     *
+     * @param i    The index.
+     * @param j    The position in the path.
+     * @param maxJ The maximum position in the path.
+     * @return The generated color in hexadecimal format.
+     */
+    public static String generateColor(int i, int j, int maxJ) {
         Color baseColor = getColorByIndex(i);
-        Color adjustedColor = adjustBrightness(baseColor, j,maxJ);
+        Color adjustedColor = adjustBrightness(baseColor, j, maxJ);
         return colorToHex(adjustedColor);
     }
 
+    /**
+     * Get a color based on the given index.
+     *
+     * @param index The index.
+     * @return The color associated with the index.
+     */
     public static Color getColorByIndex(int index) {
-        Color[] colors = {Color.ORANGE, Color.GREEN, Color.BLUE, Color.RED,Color.YELLOW};
+        Color[] colors = {Color.ORANGE, Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW};
         return colors[index % colors.length];
     }
 
+    /**
+     * Adjust the brightness of a given color based on the specified parameters.
+     *
+     * @param color The color to adjust.
+     * @param j     The position in the path.
+     * @param maxJ  The maximum position in the path.
+     * @return The adjusted color.
+     */
     public static Color adjustBrightness(Color color, int j, int maxJ) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 
@@ -391,13 +441,22 @@ public class ViewController implements Initializable {
         return Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
     }
 
+    /**
+     * Convert a color to its hexadecimal representation.
+     *
+     * @param color The color to convert.
+     * @return The hexadecimal representation of the color.
+     */
     public static String colorToHex(Color color) {
         return String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
     }
 
-
-    void handleCourierSelection(Courier newCourier){
-
+    /**
+     * Handle the selection of a courier, updating the displayed delivery requests and paths accordingly.
+     *
+     * @param newCourier The newly selected courier.
+     */
+    void handleCourierSelection(Courier newCourier) {
         // Filter the delivery tours for the selected courier
         DeliveryTour selectedTour = controller.getListeDelivery().stream()
                 .filter(tour -> tour.getCourier().equals(newCourier))
@@ -406,38 +465,23 @@ public class ViewController implements Initializable {
 
         if (selectedTour != null) {
             setDeliveryRequestIHM(selectedTour.getRequests());
-            String markersJs = drawPaths(controller.getCityMap(),null);
+            String markersJs = drawPaths(controller.getCityMap(), null);
             String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
             engine.loadContent(mapHtml);
-
         }
     }
 
+    /**
+     * Handles the event when the "Load Map" button is clicked. This method prompts the user to save the current map state,
+     * then opens a new window for loading a new map file. The loaded map is displayed in the WebView, and the associated
+     * deliveries and paths are updated accordingly.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an error occurs during the file loading process.
+     */
     @FXML
     void handleLoadMap(ActionEvent event) throws IOException {
         handleSaveMap(event);
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Open XML Map File");
-//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-//        File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
-//
-//        if (selectedFile != null) {
-//            try {
-//                // Load the selected XML map file
-//                controller = new Controller(selectedFile.getAbsolutePath());
-//                setCourierIHM(controller.getListeDelivery());
-//                controller.setGlobalDate(LocalDate.now());
-//                listDelivery.clear();
-//
-//                String markersJs = displayDeliveryPoints(null).toString();
-//                String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
-//
-//                engine.loadContent(mapHtml);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                // Handle the exception (e.g., show an error message)
-//            }
-//        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/insalyonif/hubert/newMap.fxml"));
         Parent root = (Parent) loader.load();
 
@@ -449,22 +493,27 @@ public class ViewController implements Initializable {
         newStage.showAndWait();
     }
 
+    /**
+     * Loads a new map based on the selected file path and the specified date. This method initializes a new Controller
+     * with the selected map file, sets the global date, and updates the displayed map, couriers, and delivery requests.
+     *
+     * @param datePicker        The selected date for the new map.
+     * @param selectedFilePath  The file path of the selected map file.
+     */
     void loadMap(LocalDate datePicker, String selectedFilePath ) {
 
         // Load the selected XML map file
         controller = new Controller(selectedFilePath);
         setCourierIHM(controller.getListeDelivery());
         controller.setGlobalDate(datePicker);
-        System.out.println("passe");
 
         dateLabel.setText(String.valueOf(datePicker));
 
-        // Convertir la chaîne en objet Path
+        // Convert the string to a Path object
         Path path = Paths.get(selectedFilePath);
-        // Obtenir le nom du fichier
+        // Get the file name
         String fileName = path.getFileName().toString();
         fileNameLabel.setText(fileName);
-
 
         String markersJs = displayDeliveryPoints(null).toString();
         String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
@@ -472,26 +521,24 @@ public class ViewController implements Initializable {
         engine.loadContent(mapHtml);
     }
 
-
-
+    /**
+     * Handle the import of a map, saving the existing file, and then importing data from the selected XML file.
+     *
+     * @param event The action event triggering the map import.
+     * @throws Exception If an error occurs during the import process.
+     */
     @FXML
     void handleImportMap(ActionEvent event) throws Exception {
-        // Save le fichier existant
+        // Save the existing file
         handleSaveMap(event);
 
-        //selectedFilePath = "";
-        //listDelivery.clear();
-
-        // Importer les données du xml
+        // Import data from the XML file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
 
         // Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
-
-        //getClass().getResource("/fr/insalyonif/hubert/successSave.fxml")
-
 
         // Show open file dialog
         Stage stage = (Stage) import1.getScene().getWindow();
@@ -532,20 +579,12 @@ public class ViewController implements Initializable {
             System.out.println("fileName File: " + fileName);
             System.out.println("fileDate File: " + fileDate);
 
-            // Use Path to extract file name and extension
-            //Path path = Paths.get(selectedFilePath);
-            //String fileName = path.getFileName().toString(); // Extracts the file name
-
-            //String[] fileNameParts = fileName.split("_");
-            //String lastWord = fileNameParts[fileNameParts.length - 1];
-
             String stratPath = "src/main/resources/fr/insalyonif/hubert/fichiersXML2022/";
             String pathMap = stratPath + fileName + ".xml";
             System.out.println("Path of the map: " + pathMap);
 
             Path path = Paths.get(pathMap);
             if (!Files.exists(path)) {
-                //throw new IllegalArgumentException("The map doesn't exist : " + pathMap);
                 // Show an error popup if no file is selected
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("The map doesnt exist");
@@ -554,50 +593,31 @@ public class ViewController implements Initializable {
                 alert.showAndWait();
                 return;
             }
-
-
-            // Extract date from the file name
-            //String datePattern = "yyyy-MM-dd"; // Adjust the pattern based on the actual date format in the file name
-            //DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
-
-            // Extract the date substring from the file name
-            //String dateString = fileName.substring(11, 21); // Adjust indices based on the actual position of the date in the file name
-
-            // Parse the date string to LocalDate
-            //LocalDate fileDate = LocalDate.parse(dateString, dateFormatter);
-            //System.out.println("File Date: " + fileDate);
-
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/insalyonif/hubert/ihm.fxml"));
-//            Parent root = loader.load();
-//
-//            // Afficher la nouvelle scène
-//            Scene scene = new Scene(root);
-//            Stage stage1 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage1.setScene(scene);
-
-            //ViewController viewController = loader.getController();
             loadMap(fileDate, pathMap);
             importAllTheDeliveriesIntoController(selectedFilePath);
             displayAllTheDeliveryPoints();
 
             stage.show();
         }
-
-
     }
 
+    /**
+     * Set the displayed delivery requests based on the provided list.
+     *
+     * @param delivery The list of delivery requests to display.
+     */
     public void setDeliveryRequestIHM(ArrayList<DeliveryRequest> delivery) {
         listDelivery.clear();
-        /*for (DeliveryRequest demande : delivery) {
-            listDelivery.add(demande);
-        }*/
         listDelivery.addAll(delivery);
     }
 
-
-
+    /**
+     * Set the displayed couriers based on the provided list of delivery tours.
+     *
+     * @param deliveryTours The list of delivery tours.
+     */
     public void setCourierIHM(ArrayList<DeliveryTour> deliveryTours) {
-        Courier c =courier.getValue();
+        Courier c = courier.getValue();
         listCourier.clear();
         for (DeliveryTour deliveryTour : deliveryTours) {
             listCourier.add(deliveryTour.getCourier());
@@ -605,17 +625,23 @@ public class ViewController implements Initializable {
         courier.setValue(c);
     }
 
-
+    /**
+     * Set the coordinates of the last clicked point on the map.
+     *
+     * @param lat The latitude of the last clicked point.
+     * @param lng The longitude of the last clicked point.
+     */
     public void setLastClickedCoordinates(double lat, double lng) {
         this.lastClickedLat = lat;
         this.lastClickedLng = lng;
     }
 
-    public void handleMapClick(double lat, double lng) {
-        setLastClickedCoordinates(lat, lng);
-        //System.out.println("Latitude: " + lat + ", Longitude: " + lng);
-    }
-
+    /**
+     * Initialize the controller, setting up the WebView, observable lists, and event listeners.
+     *
+     * @param url            The URL to initialize.
+     * @param resourceBundle The resource bundle for localization.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         engine = webView.getEngine();
@@ -634,7 +660,6 @@ public class ViewController implements Initializable {
         );
 
         listCourier= FXCollections.observableArrayList();
-
 
         courier.setConverter(new StringConverter<Courier>() {
             @Override
@@ -671,8 +696,8 @@ public class ViewController implements Initializable {
                 handleDeliverySelection(selectedDelivery);
                 Courier correspondingCourier = getCorrespondingCourier(selectedDelivery);
                 int id = correspondingCourier != null ? correspondingCourier.getId() : -1;
-                System.out.println(id);
-                System.out.println(selectedDelivery);
+                //System.out.println(id);
+                //System.out.println(selectedDelivery);
             }
         });
 
@@ -682,7 +707,7 @@ public class ViewController implements Initializable {
             if (selectedDelivery != null) {
                 Courier correspondingCourier = getCorrespondingCourier(selectedDelivery);
                 int id = correspondingCourier != null ? correspondingCourier.getId() : -1;
-                System.out.println("caca");
+                //System.out.println("caca");
 
                 // Appeler la fonction de suppression ici
                 handleDeleteDelivery(selectedDelivery, id);
@@ -694,6 +719,13 @@ public class ViewController implements Initializable {
         });
 
     }
+
+    /**
+     * Get the corresponding courier for a given delivery request.
+     *
+     * @param selectedDelivery The selected delivery request.
+     * @return The corresponding courier or null if not found.
+     */
     private Courier getCorrespondingCourier(DeliveryRequest selectedDelivery) {
         for (DeliveryTour deliveryTour : controller.getListeDelivery()) {
             for (DeliveryRequest delivery : deliveryTour.getRequests()) {
@@ -705,6 +737,11 @@ public class ViewController implements Initializable {
         return null;
     }
 
+    /**
+     * Handle the selection of a delivery request, updating the map accordingly.
+     *
+     * @param selectedDelivery The selected delivery request.
+     */
     private void handleDeliverySelection(DeliveryRequest selectedDelivery) {
         if (engine != null) {
             String centerMapScript = String.format("map.setView([%f, %f], 14);", selectedDelivery.getDeliveryLocation().getLatitude(), selectedDelivery.getDeliveryLocation().getLongitude()+0.004);
@@ -719,11 +756,16 @@ public class ViewController implements Initializable {
             }
             String markersJs = drawPaths(controller.getCityMap(),selectedDelivery);
             String mapHtml = MAP_HTML_TEMPLATE.formatted(markersJs);
-            System.out.println("LLAAAA"+mapHtml);
+            //System.out.println("LLAAAA"+mapHtml);
             engine.loadContent(mapHtml);
         }
     }
 
+    /**
+     * Handle the saving of the current map, writing it to a file.
+     *
+     * @param event The action event triggering the map save.
+     */
     @FXML
     void handleSaveMap(ActionEvent event) {
 
@@ -767,7 +809,7 @@ public class ViewController implements Initializable {
                 stage.show();
             }
 
-            System.out.println("Fichier enregistré avec succès à : " + file.getAbsolutePath());
+            //System.out.println("Fichier enregistré avec succès à : " + file.getAbsolutePath());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -775,6 +817,9 @@ public class ViewController implements Initializable {
         }
     }
 
+    /**
+     * Display all the delivery points on the map, updating the WebView content and associated data.
+     */
     public void displayAllTheDeliveryPoints(){
 
         String markersJs = drawPaths(controller.getCityMap(), null);

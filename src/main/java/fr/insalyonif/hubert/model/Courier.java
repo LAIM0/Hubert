@@ -1,30 +1,33 @@
 package fr.insalyonif.hubert.model;
 
+/**
+ * Represents a courier in a delivery system.
+ */
 public class Courier {
     private int id;
 
     /**
-     * Constructeur de la classe Courier.
+     * Constructor for the Courier class.
      *
-     * @param id L'identifiant unique du courrier.
+     * @param id The unique identifier of the courier.
      */
     public Courier(int id) {
         this.id = id;
     }
 
     /**
-     * Obtient l'identifiant unique du courrier.
+     * Gets the unique identifier of the courier.
      *
-     * @return L'identifiant unique du courrier.
+     * @return The unique identifier of the courier.
      */
     public int getId() {
         return this.id;
     }
 
     /**
-     * Retourne une représentation sous forme de chaîne de caractères du courrier.
+     * Returns a string representation of the courier.
      *
-     * @return Une chaîne de caractères représentant le courrier.
+     * @return A string representing the courier.
      */
     @Override
     public String toString() {

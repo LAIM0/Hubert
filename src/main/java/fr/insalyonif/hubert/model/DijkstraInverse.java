@@ -1,34 +1,32 @@
 package fr.insalyonif.hubert.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Classe pour implémenter l'algorithme de Dijkstra Inverse.
+ * Class to implement the Inverse Dijkstra's algorithm.
  */
 public class DijkstraInverse extends AbstractDijkstra {
 
     /**
-     * Constructeur de la classe DijkstraInverse.
+     * Constructor for the DijkstraInverse class.
      *
-     * @param sizeGraph La taille du graphe.
-     * @param cityMap   La carte de la ville utilisée pour la navigation.
+     * @param sizeGraph The size of the graph.
+     * @param cityMap   The city map used for navigation.
      */
     public DijkstraInverse(int sizeGraph, CityMap cityMap) {
         super(sizeGraph, cityMap);
-
     }
 
     /**
-     * Relâche un nœud dans l'algorithme de relaxation de DijkstraInverse.
+     * Relaxes a node in the Inverse Dijkstra's relaxation algorithm.
      *
-     * @param u      Le nœud source.
-     * @param v      Le nœud de destination.
-     * @param weight Le poids associé à l'arête entre u et v.
+     * @param u      The source node.
+     * @param v      The destination node.
+     * @param weight The weight associated with the edge between u and v.
      */
     @Override
     protected void relax(Intersection u, Intersection v, double weight) {
-        // Met à jour la distance et le prédecesseur si un chemin plus court est trouvé.
+        // Updates the distance and predecessor if a shorter path is found.
         if (distance[u.getPos()] + weight < distance[v.getPos()]) {
             distance[v.getPos()] = distance[u.getPos()] + weight;
             this.pi[v.getPos()] = u.getPos();
@@ -36,30 +34,30 @@ public class DijkstraInverse extends AbstractDijkstra {
     }
 
     /**
-     * Construit la copie partielle du tableau pi lors de l'ajout d'une demande de livraison.
+     * Builds the partial copy of the pi array when adding a delivery request.
      *
-     * @param piCopy    Tableau partiellement copié.
-     * @param start     L'intersection de départ.
-     * @param delivery  L'intersection de livraison.
+     * @param piCopy    Partially copied array.
+     * @param start     The starting intersection.
+     * @param delivery  The delivery intersection.
      */
     protected void piCopyConstructor(int[] piCopy, Intersection start, Intersection delivery) {
         int j = delivery.getPos();
-        ArrayList<Integer> parcours = new ArrayList<Integer>();
-        parcours.add(j);
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        path.add(j);
         while (j != start.getPos()) {
-            parcours.add(this.pi[j]);
+            path.add(this.pi[j]);
             j = this.pi[j];
         }
-        for (int i = parcours.size() - 1; i > 0; i--) {
-            piCopy[parcours.get(i)] = parcours.get(i - 1);
+        for (int i = path.size() - 1; i > 0; i--) {
+            piCopy[path.get(i)] = path.get(i - 1);
         }
     }
 
     /**
-     * Récupère les voisins d'une intersection utilisés dans l'algorithme de DijkstraInverse.
+     * Gets the neighbors of an intersection used in the Inverse Dijkstra's algorithm.
      *
-     * @param intersection L'intersection pour laquelle les voisins sont récupérés.
-     * @return Une collection de segments de route voisins.
+     * @param intersection The intersection for which neighbors are retrieved.
+     * @return A collection of neighboring road segments.
      */
     @Override
     protected Iterable<RoadSegment> getNeighbors(Intersection intersection) {
@@ -67,10 +65,10 @@ public class DijkstraInverse extends AbstractDijkstra {
     }
 
     /**
-     * Sélectionne le nœud suivant à explorer pendant l'algorithme de DijkstraInverse.
+     * Selects the next node to explore during the Inverse Dijkstra's algorithm.
      *
-     * @param roadSegment Le segment de route connectant le nœud actuel au nœud suivant.
-     * @return Le nœud d'origine du segment de route.
+     * @param roadSegment The road segment connecting the current node to the next node.
+     * @return The origin node of the road segment.
      */
     @Override
     protected Intersection selectNode(RoadSegment roadSegment) {
@@ -78,17 +76,17 @@ public class DijkstraInverse extends AbstractDijkstra {
     }
 
     /**
-     * Crée un objet Chemin représentant le chemin entre deux intersections.
+     * Creates a Chemin object representing the path between two intersections.
      *
-     * @param start       L'intersection de départ.
-     * @param destination L'intersection de destination.
-     * @param pi          Tableau de prédécesseurs représentant le chemin.
-     * @param cout        Le coût total du chemin.
-     * @return Un objet Chemin représentant le chemin calculé.
+     * @param start       The starting intersection.
+     * @param destination The destination intersection.
+     * @param pi          Array of predecessors representing the path.
+     * @param cost        The total cost of the path.
+     * @return A Chemin object representing the calculated path.
      */
     @Override
-    protected Chemin createChemin(Intersection start, Intersection destination, int[] pi, double cout) {
-        Chemin chemin = new Chemin(destination, start, pi, cout);
+    protected Chemin createChemin(Intersection start, Intersection destination, int[] pi, double cost) {
+        Chemin chemin = new Chemin(destination, start, pi, cost);
         return chemin;
     }
 }

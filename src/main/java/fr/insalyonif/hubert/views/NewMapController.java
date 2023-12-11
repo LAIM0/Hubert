@@ -19,6 +19,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+/**
+ * The NewMapController class is responsible for handling user interactions for loading a new map.
+ */
 public class NewMapController {
 
     @FXML
@@ -29,12 +32,19 @@ public class NewMapController {
 
     private String selectedFilePath;
 
+    /**
+     * Initializes the controller.
+     */
     public void initialize() {
     }
 
+    /**
+     * Handles the event when the "Load File" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     private void handleLoadFile(ActionEvent event) {
-
         // Create a FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -43,9 +53,6 @@ public class NewMapController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        //getClass().getResource("/fr/insalyonif/hubert/successSave.fxml")
-
-
         // Show open file dialog
         Stage stage = (Stage) fileLoader.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
@@ -53,7 +60,7 @@ public class NewMapController {
         // Check if a file is selected
         if (selectedFile != null) {
             selectedFilePath = selectedFile.getAbsolutePath();
-            System.out.println("Selected File: " + selectedFilePath);
+            //System.out.println("Selected File: " + selectedFilePath);
 
             // Show a success popup
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -71,12 +78,16 @@ public class NewMapController {
         }
     }
 
+    /**
+     * Handles the event when the "Start" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an error occurs during the loading of the FXML file.
+     */
     @FXML
     private void handleStart(ActionEvent event) throws IOException {
-        // Récupérer la date du DatePicker
-        //start.setVisible(true);
-        if (datePicker.getValue()==null || Objects.equals(selectedFilePath, null) || Objects.equals(selectedFilePath, "")){
-            //System.out.println("selectedFilePath = "+selectedFilePath);
+        // Check if the DatePicker and selectedFilePath are not null or empty
+        if (datePicker.getValue() == null || Objects.equals(selectedFilePath, null) || Objects.equals(selectedFilePath, "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File Loading Failed");
             alert.setHeaderText(null);
@@ -85,15 +96,16 @@ public class NewMapController {
             return;
         }
 
-        // Charger le fichier FXML "ihm.fxml"
+        // Load the FXML file "ihm.fxml"
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/insalyonif/hubert/ihm.fxml"));
         Parent root = loader.load();
 
-        // Afficher la nouvelle scène
+        // Show the new scene
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
 
+        // Pass the selected date and file path to the ViewController
         ViewController viewController = loader.getController();
         viewController.loadMap(datePicker.getValue(), selectedFilePath);
 
