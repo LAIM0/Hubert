@@ -225,7 +225,7 @@ public class StartController {
     private void handleStart(ActionEvent event) throws IOException {
         // Récupérer la date du DatePicker
         //start.setVisible(true);
-        if (datePicker.getValue()==null || Objects.equals(selectedFilePath, null)){
+        if (datePicker.getValue()==null || Objects.equals(selectedFilePath, null) || Objects.equals(selectedFilePath, "")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File Loading Failed");
             alert.setHeaderText(null);

@@ -2,9 +2,5 @@
 <map fileName="mediumMap" globalDate="2023-12-20" >
     <warehouse address="25303831" />
     <deliveryTour courier="0" startTime="null" endTime="null">
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.752647" longitude="4.8724184" id="1682387615"/>
-            <timeWindow startTime="9" endTime="10" />
-        </deliveryRequest>
     </deliveryTour>
 </map>

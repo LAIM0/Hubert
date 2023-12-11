@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<map fileName="mediumMp" globalDate="2023-12-05" >
+<map fileName="mediumMap" globalDate="2023-12-05" >
     <warehouse address="25303831" />
     <deliveryTour courier="0" startTime="null" endTime="null">
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.753685" longitude="4.867738" id="3509888072"/>
+        <deliveryRequest deliveryTime="2023-12-05T08:03:34Z" >
+            <deliveryLocation latitude="45.75691" longitude="4.8763556" id="48830470"/>
             <timeWindow startTime="8" endTime="9" />
-        </deliveryRequest>
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.758274" longitude="4.885514" id="1918509928"/>
-            <timeWindow startTime="8" endTime="9" />
-        </deliveryRequest>
-    </deliveryTour>
-    <deliveryTour courier="1" startTime="null" endTime="null">
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.752003" longitude="4.902592" id="191134387"/>
-            <timeWindow startTime="8" endTime="9" />
-        </deliveryRequest>
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.75941" longitude="4.86923" id="208769112"/>
-            <timeWindow startTime="9" endTime="10" />
-        </deliveryRequest>
-        <deliveryRequest deliveryTime="null" >
-            <deliveryLocation latitude="45.755867" longitude="4.8951344" id="191134501"/>
-            <timeWindow startTime="9" endTime="10" />
         </deliveryRequest>
     </deliveryTour>
 </map>
