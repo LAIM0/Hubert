@@ -146,9 +146,7 @@ public abstract class AbstractDijkstra {
         }
 
         if (!canReachAllDeliveryPoints) {
-            deliveryRequest.remove(start);
-            chemins.removeIf(chemin -> chemin.getDebut().equals(start));
-            chemins.removeIf(chemin -> chemin.getFin().equals(start));
+
             return false;
         }
 
@@ -165,6 +163,12 @@ public abstract class AbstractDijkstra {
             }
         }
         return true;
+    }
+
+    public void cantReachAllDeliveryPoints(Intersection start){
+        deliveryRequest.remove(start);
+        chemins.removeIf(chemin -> chemin.getDebut().equals(start));
+        chemins.removeIf(chemin -> chemin.getFin().equals(start));
     }
 
     protected abstract Iterable<RoadSegment> getNeighbors(Intersection intersection);

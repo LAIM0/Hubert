@@ -499,7 +499,8 @@ public class Controller {
 
                 boolean b1 = deliveryTour.getDijkstra().runDijkstra(intersectionPlusProche, sizeGraph);
                 boolean b2 = deliveryTour.getDijkstraInverse().runDijkstra(intersectionPlusProche, sizeGraph);
-
+                System.out.println("b1"+b1);
+                System.out.println("b2"+b2);
                 //Si un des deux false alors pop up BOOL1 && BOOL2
                 if (b1 && b2) {
                     deliveryTour.clearCheminsDij();
@@ -524,6 +525,8 @@ public class Controller {
 
                     return 0; //0 for success
                 } else {
+                    deliveryTour.getDijkstra().cantReachAllDeliveryPoints(intersectionPlusProche);
+                    deliveryTour.getDijkstraInverse().cantReachAllDeliveryPoints(intersectionPlusProche);
                     return 1; //Error -> Non accessible
                 }
             } else {
