@@ -517,6 +517,12 @@ public class ViewController implements Initializable {
         newStage.showAndWait();
     }
 
+    /**
+     * Loads a map with a date and the Path of the XML file.
+     *
+     * @param datePicker The date of the deliveries.
+     * @param selectedFilePath The path of the XML file.
+     */
     void loadMap(LocalDate datePicker, String selectedFilePath ) {
 
         // Load the selected XML map file

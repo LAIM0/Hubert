@@ -32,6 +32,9 @@ import java.time.LocalDate;
 
 import static fr.insalyonif.hubert.model.CreateDynamique.*;
 
+/**
+ * The Controller class is the main file that makes the link between the models and the views.
+ */
 public class Controller {
     private CityMap cityMap;
 
@@ -82,6 +85,11 @@ public class Controller {
         this.listeDelivery = listeDelivery;
     }
 
+    /**
+     * Constructor for the Controller class.
+     *
+     * @param path The path to the XML file containing the city map information.
+     */
     public Controller(String path) {
         //initialize class variables
         cityMap = new CityMap();
@@ -96,7 +104,6 @@ public class Controller {
         try {
             String xmlMap = path;
             Path filePath = Paths.get(xmlMap);
-            //"src/main/resources/fr/insalyonif/hubert/fichiersXML2022/mediumMap.xml"
             fileName = filePath.getFileName().toString();
             int extensionIndex = fileName.lastIndexOf('.');
             if (extensionIndex > 0) {
@@ -121,6 +128,9 @@ public class Controller {
 
     }
 
+    /**
+     * Creates a new delivery tour with a new courier.
+     */
     public void newDeliveryTour(){
         Courier c = new Courier(listeDelivery.size());
         DeliveryTour defaultDeliveryTour= new DeliveryTour();
@@ -133,12 +143,16 @@ public class Controller {
         listeDelivery.add(defaultDeliveryTour);
     }
 
+    /**
+     * Deletes a delivery request from the specified delivery tour.
+     *
+     * @param requestToDelete The delivery request to delete.
+     * @param id              The ID of the delivery tour.
+     * @return 0 for success, other values for failure.
+     */
     public int deleteDelivery(DeliveryRequest requestToDelete, int id) {
         DeliveryTour deliveryTour= listeDelivery.get(id);
-        //System.out.println(requestToDelete);
-        //System.out.println(deliveryTour.getDijkstra().getChemins());
         Intersection interToDelete = requestToDelete.getDeliveryLocation();
-        //System.out.println(interToDelete);
         Iterator<Chemin> cheminIterator = deliveryTour.getDijkstra().getChemins().iterator();
         while (cheminIterator.hasNext()) {
             Chemin chemin = cheminIterator.next();
@@ -174,10 +188,12 @@ public class Controller {
         return 0; //0 for success
     }
 
-
-
-
-
+    /**
+     * Uses a dynamic programming approach to optimize the delivery tour for a given time window.
+     *
+     * @param deliveryTour The delivery tour to optimize.
+     * @return A list of Chemin representing the optimized tour path.
+     */
     private List<Chemin> UseDynamic(DeliveryTour deliveryTour){
         ArrayList <DeliveryRequest> requests8 = new ArrayList<>();
         ArrayList <DeliveryRequest> requests9 = new ArrayList<>();
@@ -228,7 +244,6 @@ public class Controller {
         int nextStart = 0;
         ArrayList<DeliveryRequest> nextrequests = new ArrayList<>();
         ArrayList<DeliveryRequest> rTemp = new ArrayList<>();
-//                    huit
 
         if (!requests8.isEmpty()) {
             List<Integer> optimalPath8 = new ArrayList<>();
@@ -462,8 +477,6 @@ public class Controller {
             }
         }
 
-
-
         optimalPath.add(0);
         System.out.printf("Length of the smallest hamiltonian circuit = %f\n", d);
         System.out.printf("Optimal Hamiltonian Circuit Path: %s\n", optimalPath);
@@ -471,7 +484,20 @@ public class Controller {
     }
 
 
-
+    /**
+     * Adds a new delivery point to the specified delivery tour based on the information provided
+     * in the {@code DeliveryIHMController} and the delivery tour's ID.
+     *
+     * @param deliveryIHM The controller providing the delivery information.
+     * @param idDeliveryTour The ID of the delivery tour to which the new delivery point will be added.
+     * @return An integer indicating the status of the operation:
+     *         <ul>
+     *             <li>{@code 0} for success.</li>
+     *             <li>{@code 1} if the delivery point is not accessible.</li>
+     *             <li>{@code 2} if the delivery point is already present.</li>
+     *             <li>{@code 3} if there is an issue in the delivery time computation.</li>
+     *         </ul>
+     */
     public int newDeliveryPoint(DeliveryIHMController deliveryIHM, int idDeliveryTour) {
         DeliveryTour deliveryTour= listeDelivery.get(idDeliveryTour);
         if(deliveryIHM.getLatDouble()!=0 && deliveryIHM.getLngDouble()!=0) {
@@ -486,9 +512,7 @@ public class Controller {
             boolean intersectionExist = false;
             for (DeliveryRequest request : deliveryTour.getRequests()) {
                 if (request.getDeliveryLocation().equals(intersectionPlusProche)) {
-                    //System.out.println("equal intersection");
                     if(request.getTimeWindow().getEndTime() == deliveryIHM.getTimeWindow().getEndTime()){
-                       // System.out.println("equal timewindow");
                         intersectionExist = true;
                         break;
                     }
@@ -533,6 +557,12 @@ public class Controller {
         return 0;
     }
 
+    /**
+     * Updates the order of delivery points in the specified delivery tour based on the order of
+     * intersections in the paths of the tour's associated courier.
+     *
+     * @param idDeliveryTour The ID of the delivery tour to be updated.
+     */
     private void MAJDeliveryPointList(int idDeliveryTour){
         DeliveryTour deliveryTour = listeDelivery.get(idDeliveryTour);
         List<Chemin> chemins =deliveryTour.getPaths();
@@ -550,6 +580,14 @@ public class Controller {
         });
     }
 
+    /**
+     * Finds the intersection closest to the given latitude and longitude from the provided list of intersections.
+     *
+     * @param lat The latitude of the location.
+     * @param lng The longitude of the location.
+     * @param intersections The list of intersections to search for the closest one.
+     * @return The closest intersection to the given coordinates.
+     */
     public static Intersection trouverIntersectionPlusProche(double lat, double lng, List<Intersection> intersections) {
         if (intersections == null || intersections.isEmpty()) {
             return null; // La liste d'intersections est vide
@@ -569,6 +607,15 @@ public class Controller {
         return intersectionPlusProche;
     }
 
+    /**
+     * Calculates the distance between two sets of latitude and longitude coordinates.
+     *
+     * @param lat1 Latitude of the first point.
+     * @param lng1 Longitude of the first point.
+     * @param lat2 Latitude of the second point.
+     * @param lng2 Longitude of the second point.
+     * @return The distance between the two points in kilometers.
+     */
     protected static double distance(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 6371; // Rayon de la Terre en kilomètres
 
@@ -584,6 +631,12 @@ public class Controller {
         return earthRadius * c; // Distance en kilomètres
     }
 
+    /**
+     * Finds the best courier and time window combination for scheduling new deliveries based on existing delivery tours.
+     *
+     * @return An array containing the best courier and time window found.
+     *         The first element is the best courier, and the second element is the corresponding time window.
+     */
     public Object[] findBestCourier(){
         int min = 9999;
         Courier bestCourier = new Courier(0);
@@ -612,6 +665,12 @@ public class Controller {
         System.out.println("Best Timwindow "+ timeWindow);
         return new Object[]{bestCourier, timeWindow};
     }
+
+    /**
+     * Sets up and returns a list of time windows for the hours 8 to 11.
+     *
+     * @return An {@code ArrayList} of {@code TimeWindow} objects representing time windows from 8 to 11.
+     */
     public ArrayList<TimeWindow> setTimeWindowList(){
         ArrayList<TimeWindow> timeWindows= new ArrayList<>();
         for(int i=8; i<12;i++){
@@ -620,27 +679,33 @@ public class Controller {
         return timeWindows;
     }
 
+    /**
+     * Checks if there is available time in the specified time window for scheduling new deliveries.
+     *
+     * @param timeWindow The time window to check for availability.
+     * @return {@code true} if the time window can accommodate new deliveries, {@code false} otherwise.
+     */
     public boolean timeWindowPossible(TimeWindow timeWindow){
         //A implementer pour vérifier que la time window peut encore recevoir des nouvelles délivery
         return true;
     }
 
-
-
-
-
+    /**
+     * Saves the current state of the city map, delivery tours, and associated data to an XML file.
+     *
+     * @param filePath The path to the file where the data will be saved.
+     * @return {@code true} if the data is successfully saved, {@code false} otherwise.
+     * @throws IOException If an IO exception occurs during the file writing process.
+     */
     public boolean saveCityMapToFile(String filePath) throws IOException {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            // Save the CityMap data to the file
-            // You can customize this based on your CityMap data structure and attributes
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
             writer.println("<map fileName=\"" + fileName + "\""+ " globalDate=\""+ globalDate + "\" >");
             writer.println("    <warehouse address=\"" + cityMap.getWareHouseLocation().getId() + "\" />");
 
             for (DeliveryTour deliveryTour : this.listeDelivery) {
                 writer.println("    <deliveryTour courier=\"" + deliveryTour.getCourier().getId() + "\" startTime=\""+ deliveryTour.getStartTime()+ "\" endTime=\""+ deliveryTour.getEndTime() +"\">");
-//                writer.println("        <courier id=\"" +  + "\" />");
                 for (DeliveryRequest deliveryRequest : deliveryTour.getRequests()){
                     writer.println("        <deliveryRequest deliveryTime=\""+ deliveryRequest.getDeliveryTime() +"\" >");
                     writer.println("            <deliveryLocation latitude=\"" + deliveryRequest.getDeliveryLocation().getLatitude() +"\"" +" longitude=\"" + deliveryRequest.getDeliveryLocation().getLongitude() +"\"" + " id=\"" + deliveryRequest.getDeliveryLocation().getId() +"\"/>");
@@ -650,8 +715,6 @@ public class Controller {
 
                 writer.println("    </deliveryTour>");
             }
-//            "\" latitude=\"" + intersection.getLatitude() +
-//                    "\" longitude=\"" + intersection.getLongitude() + "\" />");
 
             writer.println("</map>");
             return true;
@@ -662,6 +725,12 @@ public class Controller {
 
     }
 
+    /**
+     * Loads the state of the city map and delivery tours from an XML file.
+     *
+     * @param path The path to the XML file containing the data to be loaded.
+     * @throws Exception If an exception occurs during the file reading or parsing process.
+     */
     public void loadArchiveFile(String path) throws Exception {
         // Création d'une instance de File pour le fichier XML
         listeDelivery.clear();
@@ -755,6 +824,12 @@ public class Controller {
     }
 
 
+    /**
+     * Computes and updates the delivery times for each delivery request in the specified delivery tour.
+     *
+     * @param idDeliveryTour The ID of the delivery tour for which delivery times will be computed.
+     * @return The last delivery request that exceeds its time window or {@code null} if all deliveries are within their time windows.
+     */
     public DeliveryRequest computeDeliveryTime(int idDeliveryTour){
         DeliveryTour deliveryTour = this.getListeDelivery().get(idDeliveryTour);
         ArrayList<DeliveryRequest> deliveryRequests = deliveryTour.getRequests();
@@ -765,7 +840,6 @@ public class Controller {
         Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
 
         // Afficher l'instant
-        //System.out.println("Instant à 8h du matin pour la date spécifique : " + instant);
         int i=0;
 
         for(DeliveryRequest deliveryRequest : deliveryRequests){

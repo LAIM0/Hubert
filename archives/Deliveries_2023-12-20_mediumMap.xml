@@ -2,5 +2,47 @@
 <map fileName="mediumMap" globalDate="2023-12-20" >
     <warehouse address="25303831" />
     <deliveryTour courier="0" startTime="null" endTime="null">
+        <deliveryRequest deliveryTime="2023-12-20T08:04:17Z" >
+            <deliveryLocation latitude="45.745415" longitude="4.887695" id="26464320"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:14:33Z" >
+            <deliveryLocation latitude="45.737427" longitude="4.89702" id="2864851049"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:19:53Z" >
+            <deliveryLocation latitude="45.7371" longitude="4.8980203" id="60901947"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:39:16Z" >
+            <deliveryLocation latitude="45.738747" longitude="4.9042854" id="143478"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:58:47Z" >
+            <deliveryLocation latitude="45.758266" longitude="4.8969316" id="191134606"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T09:09:18Z" >
+            <deliveryLocation latitude="45.754368" longitude="4.8827524" id="25611404"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T09:21:21Z" >
+            <deliveryLocation latitude="45.75301" longitude="4.863642" id="25336175"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+    </deliveryTour>
+    <deliveryTour courier="1" startTime="null" endTime="null">
+        <deliveryRequest deliveryTime="2023-12-20T08:04:09Z" >
+            <deliveryLocation latitude="45.74357" longitude="4.8728495" id="7300867"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:21:53Z" >
+            <deliveryLocation latitude="45.762623" longitude="4.889251" id="2520964231"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
+        <deliveryRequest deliveryTime="2023-12-20T08:31:03Z" >
+            <deliveryLocation latitude="45.761673" longitude="4.8820233" id="55457314"/>
+            <timeWindow startTime="8" endTime="9" />
+        </deliveryRequest>
     </deliveryTour>
 </map>
