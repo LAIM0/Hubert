@@ -165,6 +165,11 @@ public abstract class AbstractDijkstra {
         return true;
     }
 
+    /**
+     * Removes an intersection from the deliveryRequest ands from all the chemins.
+     *
+     * @param start    The intersection to remove from the Dijkstra.
+     */
     public void cantReachAllDeliveryPoints(Intersection start){
         deliveryRequest.remove(start);
         chemins.removeIf(chemin -> chemin.getDebut().equals(start));

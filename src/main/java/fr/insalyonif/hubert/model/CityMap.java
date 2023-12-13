@@ -169,6 +169,11 @@ public class CityMap {
         return null;
     }
 
+    /**
+     * Display the intersections.
+     *
+     * @param filePath The path of the file with the intersection.
+     */
     public void displayIntersections(String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (Intersection intersection : intersections) {
