@@ -116,7 +116,7 @@ public class StartController {
 
             if (map == null || deliveryTour == null){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Ce fichier ne correspond pas :(");
+                alert.setContentText("The file doesn't have the good format :(");
                 alert.showAndWait();
                 return;
             }

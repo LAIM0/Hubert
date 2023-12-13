@@ -11,12 +11,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -44,7 +51,7 @@ public class NewMapController {
      * @param event The ActionEvent triggered by the button click.
      */
     @FXML
-    private void handleLoadFile(ActionEvent event) {
+    private void handleLoadFile(ActionEvent event) throws ParserConfigurationException, IOException, SAXException {
 
         // Create a FileChooser
         FileChooser fileChooser = new FileChooser();
@@ -62,6 +69,25 @@ public class NewMapController {
         // Check if a file is selected
         if (selectedFile != null) {
             selectedFilePath = selectedFile.getAbsolutePath();
+
+            // Initialisation du constructeur de documents XML
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            // Parsing du document XML
+            Document doc = dBuilder.parse(selectedFile);
+
+            // Normalisation du document XML pour éliminer les espaces blancs inutiles
+            doc.getDocumentElement().normalize();
+            Element map = (Element) doc.getElementsByTagName("map").item(0);
+            Element intersection = (Element) doc.getElementsByTagName("intersection").item(0);
+            Element segment = (Element) doc.getElementsByTagName("segment").item(0);
+            if (map == null || intersection == null || segment == null){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("The file doesn't have the good format :(");
+                alert.showAndWait();
+                return;
+            }
+
             System.out.println("Selected File: " + selectedFilePath);
 
             // Show a success popup
